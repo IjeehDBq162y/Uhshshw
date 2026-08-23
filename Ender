@@ -1,11 +1,11 @@
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "↓ Converted By",
-    Text = "ToraWa Noya"
+    Text = "Corrupted IjeehDBq"
 })
 
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "Have fun!",
-    Text = "ToraWa Noya is C00l_Ch4os"
+    Text = "Corrupted"
 })
 
 game.ReplicatedStorage["01_server"]:FireServer("cmd", "-r6")
