@@ -1,7 +1,7 @@
 -- Configuration
 local chatDelay = 1.25
 local messages = {
-    "IjeehDBq sword by Corrupted IjeehDBq",
+    "Executed IjeehDBq sword by Corrupted IjeehDBq!",
     "-net",
 }
 
