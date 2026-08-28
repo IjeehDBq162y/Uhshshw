@@ -5,7 +5,7 @@ local messages = {
     "-r6 ",
     "-net",
 "Executed Sin Dragon by Corrupted",
-    "SO NOW USE IT", -- Added right below -pd
+    "-pd ", -- Added right below -pd
     "Loaded Sin Dragon by Corrupted IjeehDBq"
 }
 
