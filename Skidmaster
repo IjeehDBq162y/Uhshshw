@@ -38,7 +38,7 @@ task.spawn(function()
     
     -- Execute the external Patchma Hub script after the final delay
     local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/IjeehDBq162y/Proskidz/refs/heads/main/Glitch"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/IjeehDBq162y/Uhshshw/refs/heads/main/Ultima"))()
     end)
     
     if not success then
