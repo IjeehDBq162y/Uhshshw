@@ -2,7 +2,7 @@
 local chatDelay = 1.25
 local messages = {
     "-gh 140395948277978 82942681251131 102599402682100 90960046381276 138364679836274 111793953309477 113048125789248 132770514241770 117186631495734 16755111087 100154517572630 3756389957 150381051",
-    "-pd ",
+    "-pd",
     "-net", -- Added right below -pd
     "Sin Dragon by Corrupted IjeehDBq ",
     "Loaded Sin Dragon by Corrupted IjeehDBq ", -- Added right below -pd
