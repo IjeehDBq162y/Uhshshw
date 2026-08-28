@@ -6,8 +6,8 @@ local messages = {
     "-pd ",
     "-net ",
     "Sin Dragon by Corrupted IjeehDBq",
-    "Executed Sin Dragon by Corrupted IjeehDBq", -- Added right below -pd
-    "btw already Loaded Sin Dragon by Corrupted IjeehDBq"
+    "Loaded Sin Dragon by Corrupted IjeehDBq", -- Added right below -pd
+    "btw already Executed Sin Dragon by Corrupted IjeehDBq"
 }
 
 -- Function to safely send chat messages across different Roblox chat systems
