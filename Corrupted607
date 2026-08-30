@@ -25,7 +25,7 @@ task.spawn(function()
     chat("-ch")
     task.wait(chatDelay)
 
-    chat("-gh 12850191932")
+    chat("-gh 7491687596")
     task.wait(chatDelay)
 
     chat("-gh 5918771427 102523984905681 132006952641112 5699795428 5316549755 5316539421 5268720002")
