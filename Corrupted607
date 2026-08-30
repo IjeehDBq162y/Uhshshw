@@ -19,7 +19,7 @@ task.spawn(function()
     local chatDelay = 2.12
 
     task.wait(2.57)
-    chat("Axirian Glitcher Hats by Corrupted IjeehDBq")
+    chat("Axirian Glitcher by Corrupted IjeehDBq")
     task.wait(chatDelay)
 
     chat("-ch")
