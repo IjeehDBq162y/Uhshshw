@@ -19,7 +19,7 @@ task.spawn(function()
     local chatDelay = 2.12
 
     task.wait(2.57)
-    chat("Axirian Glitcher by Corrupted IjeehDBq")
+    chat("Evil Glitcher by Corrupted IjeehDBq")
     task.wait(chatDelay)
 
     chat("-ch")
@@ -39,7 +39,7 @@ task.spawn(function()
 
     pcall(function()
         StarterGui:SetCore("SendNotification", {
-            Title = "Message from Skidmaster",
+            Title = "Message from RobotExe go hacked the server :)",
             Text = "The hats kinda works with 24 Hours Star Glitcher",
             Icon = "rbxassetid://94507646687393",
             Duration = 5
