@@ -62,8 +62,8 @@ task.spawn(function()
 
     pcall(function()
         StarterGui:SetCore("SendNotification", {
-            Title = "Axirian Glitcher",
-            Text = "Would you like to execute Axirian Glitcher?",
+            Title = "Evil Glitcher",
+            Text = "Would you like to execute Evil Glitcher?",
             Duration = 10,
             Callback = bindable,
             Button1 = "Execute",
