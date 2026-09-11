@@ -49,7 +49,7 @@ local function CTIKC_fake_script() -- TextButton.LocalScript
 	local Players = game:GetService("Players")
 	
 	local toggleButton = script.Parent
-	local hiddenskidfling = false
+	local hiddenSkidfling = false
 	
 	
 	if not ReplicatedStorage:FindFirstChild("juisdfj0i32i0eidsuf0iok") then
@@ -58,7 +58,7 @@ local function CTIKC_fake_script() -- TextButton.LocalScript
 		detection.Parent = ReplicatedStorage
 	end
 	
-	local function fling()
+	local function Skidfling()
 		local hrp, c, vel, movel = nil, nil, nil, 0.1
 		local lp = Players.LocalPlayer
 	
@@ -71,7 +71,7 @@ local function CTIKC_fake_script() -- TextButton.LocalScript
 					hrp = c and c:FindFirstChild("HumanoidRootPart")
 				end
 	
-				if hiddenskidfling then
+				if hiddenSkidfling then
 					vel = hrp.Velocity
 					hrp.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
 					RunService.RenderStepped:Wait()
@@ -90,7 +90,7 @@ local function CTIKC_fake_script() -- TextButton.LocalScript
 	
 	toggleButton.MouseButton1Click:Connect(function()
 		hiddenfling = not hiddenfling
-		if hiddenskidfling then
+		if hiddenSkidfling then
 			toggleButton.Text = "ON"
 		else
 			toggleButton.Text = "OFF"
