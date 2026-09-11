@@ -36,7 +36,7 @@ TextLabel.Position = UDim2.new(0.0649713054, 0, 0.0727680102, 0)
 TextLabel.Size = UDim2.new(0, 128, 0, 39)
 TextLabel.Font = Enum.Font.SourceSans
 TextLabel.Text = "ERROR 807"
-TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextColor3 = Color3.fromRGB(1, 0, 1)
 TextLabel.TextSize = 34.000
 
 -- Scripts:
