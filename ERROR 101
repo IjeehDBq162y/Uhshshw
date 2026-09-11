@@ -1,0 +1,132 @@
+local TextChatService = game:GetService("TextChatService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Create the ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "HatLoaderGUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Create Main Frame (Widened to 580 to fit 3 buttons nicely)
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 580, 0, 150)
+mainFrame.Position = UDim2.new(0.5, -290, 0.5, -75) -- Perfect center
+mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+-- Add rounded corners to the frame
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 10)
+uiCorner.Parent = mainFrame
+
+--- BUTTONS ---
+
+-- Left Button: Man Face Hat
+local leftButton = Instance.new("TextButton")
+leftButton.Size = UDim2.new(0, 160, 0, 60)
+leftButton.Position = UDim2.new(0, 25, 0.5, -30)
+leftButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+leftButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+leftButton.Text = "Man Face Hat"
+leftButton.Font = Enum.Font.SourceSansBold
+leftButton.TextSize = 18
+leftButton.Parent = mainFrame
+
+local leftCorner = Instance.new("UICorner")
+leftCorner.CornerRadius = UDim.new(0, 8)
+leftCorner.Parent = leftButton
+
+-- Middle Button: Job Application Hats (NEW)
+local middleButton = Instance.new("TextButton")
+middleButton.Size = UDim2.new(0, 160, 0, 60)
+middleButton.Position = UDim2.new(0.5, -80, 0.5, -30) -- Centered
+middleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+middleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+middleButton.Text = "Job Application Hats"
+middleButton.Font = Enum.Font.SourceSansBold
+middleButton.TextSize = 15 -- Slightly smaller text size to fit the name perfectly
+middleButton.TextWrapped = true
+middleButton.Parent = mainFrame
+
+local middleCorner = Instance.new("UICorner")
+middleCorner.CornerRadius = UDim.new(0, 8)
+middleCorner.Parent = middleButton
+
+-- Right Button: Sword Hat
+local rightButton = Instance.new("TextButton")
+rightButton.Size = UDim2.new(0, 160, 0, 60)
+rightButton.Position = UDim2.new(1, -185, 0.5, -30)
+rightButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+rightButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+rightButton.Text = "Sword Hat"
+rightButton.Font = Enum.Font.SourceSansBold
+rightButton.TextSize = 18
+rightButton.Parent = mainFrame
+
+local rightCorner = Instance.new("UICorner")
+rightCorner.CornerRadius = UDim.new(0, 8)
+rightCorner.Parent = rightButton
+
+--- BUTTON ACTIONS ---
+
+-- Function for Sword Hat (Right Button)
+rightButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+    
+    -- First chat (13 BIG Sword Items)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002")
+    
+    task.wait(2)
+    
+    -- Second chat (13 more BIG Sword Items = 26 Total)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002")
+    
+    task.wait(2)
+    
+    -- Sends "-net"
+    if TextChatService.TextChannels:FindFirstChild("RBXGeneral") then
+        TextChatService.TextChannels.RBXGeneral:SendAsync("-net")
+    end
+end)
+
+-- Function for Job Application Hats (Middle Button)
+middleButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+    
+    -- First chat (12 Hats - Fits perfectly within Roblox's 200-character limit)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493")
+    
+    task.wait(2)
+    
+    -- Second chat (12 more Hats = 24 Total)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493 105287519047493")
+    
+    task.wait(2)
+    
+    -- Sends "-net"
+    if TextChatService.TextChannels:FindFirstChild("RBXGeneral") then
+        TextChatService.TextChannels.RBXGeneral:SendAsync("-net")
+    end
+end)
+
+-- Function for Man Face Hat (Left Button)
+leftButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+    
+    -- First chat (16 Manly Cubes)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518")
+    
+    task.wait(2)
+    
+    -- Second chat (16 more Manly Cubes)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518 17181773518")
+    
+    task.wait(2)
+    
+    -- Sends "-net"
+    if TextChatService.TextChannels:FindFirstChild("RBXGeneral") then
+        TextChatService.TextChannels.RBXGeneral:SendAsync("-net")
+    end
+end)
