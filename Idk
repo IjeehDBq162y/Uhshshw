@@ -1,0 +1,285 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local TextChatService = game:GetService("TextChatService")
+
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+-- === OWNER VERIFY ===
+local OWNER_ID = 5053082018 
+
+-- === PRIVÁTNÍ BOT (POUZE EXECUTE) ===
+local function botReply(message)
+	if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+		local channel = TextChatService:FindFirstChild("RBXGeneral", true)
+		if channel then channel:DisplaySystemMessage("<font color='#00E5FF'><b>[Bot]:</b></font> " .. message) end
+	else
+		game:GetService("StarterGui"):SetCore("ChatMakeSystemMessage", {Text = "[Bot]: "..message; Color = Color3.fromRGB(0, 229, 255); Font = Enum.Font.GothamBold;})
+	end
+end
+
+-- === HLAVNÍ PROMĚNNÉ ===
+local flying = false
+local noclip = false
+local currentVel = Vector3.zero
+local flySpeed = 85
+local bv, bg
+
+-- === FUNKCE PRO ÚKLID (KILL) ===
+local function killEverything(gui)
+	flying = false
+	noclip = false
+	-- Reset fyziky
+	if bv then bv:Destroy() end
+	if bg then bg:Destroy() end
+	local char = player.Character
+	if char then
+		local hum = char:FindFirstChildOfClass("Humanoid")
+		if hum then 
+			hum.PlatformStand = false 
+			hum:ChangeState(Enum.HumanoidStateType.Running)
+		end
+		-- Reset kolizí (Noclip OFF)
+		for _, part in pairs(char:GetDescendants()) do
+			if part:IsA("BasePart") then part.CanCollide = true end
+		end
+	end
+	gui:Destroy()
+end
+
+-- === GUI CREATION ===
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "UltimateOwnerSystem"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 260, 0, 320)
+main.Position = UDim2.new(0.5, -130, 0.4, 0)
+main.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+main.BackgroundTransparency = 0.1
+main.Active = true
+main.Draggable = true
+main.Parent = screenGui
+Instance.new("UICorner", main).CornerRadius = UDim.new(0, 15)
+
+local stroke = Instance.new("UIStroke", main)
+stroke.Thickness = 3
+task.spawn(function()
+	while task.wait() do stroke.Color = Color3.fromHSV(tick() % 5 / 5, 0.8, 1) end
+end)
+
+local content = Instance.new("Frame")
+content.Size = UDim2.new(1, 0, 1, 0)
+content.BackgroundTransparency = 1
+content.Parent = main
+
+-- SPEED INPUT
+local speedInput = Instance.new("TextBox")
+speedInput.Size = UDim2.new(0, 220, 0, 100)
+speedInput.Position = UDim2.new(0.5, -110, 0, 45)
+speedInput.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+speedInput.PlaceholderText = "Speed Number"
+speedInput.Text = "85"
+speedInput.TextColor3 = Color3.new(1, 1, 1)
+speedInput.TextSize = 25
+speedInput.Parent = content
+Instance.new("UICorner", speedInput)
+Instance.new("UIStroke", speedInput).Color = Color3.new(1,0,0)
+
+speedInput:GetPropertyChangedSignal("Text"):Connect(function()
+	flySpeed = tonumber(speedInput.Text) or 85
+end)
+
+-- TLAČÍTKA
+local flyBtn = Instance.new("TextButton")
+flyBtn.Size = UDim2.new(0, 220, 0, 45)
+flyBtn.Position = UDim2.new(0.5, -110, 0, 155)
+flyBtn.Text = "ACTIVATE FLY"
+flyBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+flyBtn.TextColor3 = Color3.new(1, 1, 1)
+flyBtn.Parent = content
+Instance.new("UICorner", flyBtn)
+
+local noclipBtn = Instance.new("TextButton")
+noclipBtn.Size = UDim2.new(0, 220, 0, 45)
+noclipBtn.Position = UDim2.new(0.5, -110, 0, 210)
+noclipBtn.Text = "NOCLIP: OFF"
+noclipBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+noclipBtn.TextColor3 = Color3.new(1, 1, 1)
+noclipBtn.Parent = content
+Instance.new("UICorner", noclipBtn)
+
+local updateBtn = Instance.new("TextButton")
+updateBtn.Size = UDim2.new(0, 220, 0, 45)
+updateBtn.Position = UDim2.new(0.5, -110, 0, 265)
+updateBtn.Text = "UPDATES"
+updateBtn.BackgroundColor3 = Color3.fromRGB(0, 110, 220)
+updateBtn.TextColor3 = Color3.new(1, 1, 1)
+updateBtn.Parent = content
+Instance.new("UICorner", updateBtn)
+
+local closeBtn = Instance.new("TextButton")
+closeBtn.Text = "X"
+closeBtn.Size = UDim2.new(0, 35, 0, 35)
+closeBtn.Position = UDim2.new(1, -40, 0, 5)
+closeBtn.BackgroundTransparency = 1
+closeBtn.TextColor3 = Color3.fromRGB(255, 50, 50)
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 30
+closeBtn.Parent = main
+
+-- === UPDATES PANEL ===
+local updatesFrame = Instance.new("Frame")
+updatesFrame.Size = UDim2.new(0, 200, 0, 150)
+updatesFrame.Position = UDim2.new(1, 10, 0, 0)
+updatesFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+updatesFrame.Visible = false
+updatesFrame.Parent = main
+Instance.new("UICorner", updatesFrame)
+Instance.new("UIStroke", updatesFrame).Color = Color3.fromRGB(0, 110, 220)
+
+local updatesText = Instance.new("TextLabel")
+updatesText.Size = UDim2.new(1, -10, 1, -10)
+updatesText.Position = UDim2.new(0, 5, 0, 5)
+updatesText.Text = "--- UPDATES ---\n- Fixed Kill Script\n- Fixed Update Button\n- Kill resets Fly/Noclip\n- New Warning Text"
+updatesText.TextColor3 = Color3.new(1, 1, 1)
+updatesText.TextWrapped = true
+updatesText.BackgroundTransparency = 1
+updatesText.Font = Enum.Font.Gotham
+updatesText.Parent = updatesFrame
+
+updateBtn.MouseButton1Click:Connect(function() updatesFrame.Visible = not updatesFrame.Visible end)
+
+-- === KILL WARNING GUI ===
+local killFrame = Instance.new("Frame")
+killFrame.Size = UDim2.new(1, 0, 1, 0)
+killFrame.BackgroundColor3 = Color3.fromRGB(25, 0, 0)
+killFrame.BackgroundTransparency = 0.1
+killFrame.Visible = false
+killFrame.Parent = main
+Instance.new("UICorner", killFrame).CornerRadius = UDim.new(0, 15)
+
+local killLabel = Instance.new("TextLabel")
+killLabel.Size = UDim2.new(1, 0, 0.4, 0)
+killLabel.Position = UDim2.new(0, 0, 0.2, 0)
+killLabel.Text = "Wanna Kill this gui?" -- Tvůj požadovaný text
+killLabel.TextColor3 = Color3.new(1, 1, 1)
+killLabel.BackgroundTransparency = 1
+killLabel.Font = Enum.Font.GothamBold
+killLabel.TextSize = 20
+killLabel.Parent = killFrame
+
+local yesBtn = Instance.new("TextButton") -- GREEN
+yesBtn.Size = UDim2.new(0, 90, 0, 45)
+yesBtn.Position = UDim2.new(0.15, 0, 0.65, 0)
+yesBtn.Text = "Yes"
+yesBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 0)
+yesBtn.TextColor3 = Color3.new(1, 1, 1)
+yesBtn.Parent = killFrame
+Instance.new("UICorner", yesBtn)
+
+local noBtn = Instance.new("TextButton") -- RED
+noBtn.Size = UDim2.new(0, 90, 0, 45)
+noBtn.Position = UDim2.new(0.5, 0, 0.65, 0)
+noBtn.Text = "No"
+noBtn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+noBtn.TextColor3 = Color3.new(1, 1, 1)
+noBtn.Parent = killFrame
+Instance.new("UICorner", noBtn)
+
+closeBtn.MouseButton1Click:Connect(function()
+	content.Visible = false
+	closeBtn.Visible = false
+	updatesFrame.Visible = false
+	killFrame.Visible = true
+end)
+
+noBtn.MouseButton1Click:Connect(function()
+	killFrame.Visible = false
+	content.Visible = true
+	closeBtn.Visible = true
+end)
+
+yesBtn.MouseButton1Click:Connect(function()
+	killEverything(screenGui) -- Vypne Fly, Noclip a smaže GUI
+end)
+
+-- === FLY LOGIC ===
+local function toggleFly()
+	flying = not flying
+	local char = player.Character
+	local hrp = char and char:FindFirstChild("HumanoidRootPart")
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+	
+	if flying and hrp and hum then
+		flyBtn.Text = "FLY: ACTIVE"
+		hum.PlatformStand = true
+		hrp.AssemblyLinearVelocity = Vector3.zero
+		
+		bv = Instance.new("BodyVelocity", hrp)
+		bv.MaxForce = Vector3.new(1e6, 1e6, 1e6)
+		bg = Instance.new("BodyGyro", hrp)
+		bg.MaxTorque = Vector3.new(1e6, 1e6, 1e6)
+		
+		task.spawn(function()
+			while flying do
+				local isTyping = UserInputService:GetFocusedTextBox() ~= nil
+				local moveDir = Vector3.zero
+				if not isTyping then
+					if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveDir += camera.CFrame.LookVector end
+					if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveDir -= camera.CFrame.LookVector end
+					if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveDir -= camera.CFrame.RightVector end
+					if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveDir += camera.CFrame.RightVector end
+					if UserInputService:IsKeyDown(Enum.KeyCode.E) then moveDir += Vector3.new(0, 1, 0) end
+					if UserInputService:IsKeyDown(Enum.KeyCode.Q) then moveDir -= Vector3.new(0, 1, 0) end
+				end
+				currentVel = currentVel:Lerp(moveDir * flySpeed, 0.12)
+				bv.Velocity = currentVel
+				bg.CFrame = camera.CFrame
+				local animator = hum:FindFirstChildOfClass("Animator")
+				if animator then for _, t in pairs(animator:GetPlayingAnimationTracks()) do t:Stop(0.1) end end
+				RunService.RenderStepped:Wait()
+			end
+		end)
+	else
+		flying = false
+		flyBtn.Text = "ACTIVATE FLY"
+		if bv then bv:Destroy() end
+		if bg then bg:Destroy() end
+		if hum then 
+			hum.PlatformStand = false 
+			hum:ChangeState(Enum.HumanoidStateType.Running)
+		end
+	end
+end
+
+flyBtn.MouseButton1Click:Connect(toggleFly)
+
+-- === NOCLIP LOGIC ===
+RunService.Stepped:Connect(function()
+	if noclip and player.Character then
+		for _, part in pairs(player.Character:GetDescendants()) do
+			if part:IsA("BasePart") then part.CanCollide = false end
+		end
+	end
+end)
+
+noclipBtn.MouseButton1Click:Connect(function()
+	noclip = not noclip
+	noclipBtn.Text = noclip and "NOCLIP: ON" or "NOCLIP: OFF"
+	if not noclip and player.Character then
+		for _, part in pairs(player.Character:GetDescendants()) do
+			if part:IsA("BasePart") then part.CanCollide = true end
+		end
+	end
+end)
+
+-- INITIAL BOT MESSAGE
+task.spawn(function()
+	task.wait(0.5)
+	if player.UserId == OWNER_ID then botReply("Hi welcome Owner.]")
+	else botReply("Hi player ["..player.Name.."] welcome To my Fly gui. we hope you like it.") end
+end)
