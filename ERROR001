@@ -75,7 +75,7 @@ rightCorner.Parent = rightButton
 rightButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
     
-    -- First chat (13 BIG green Sword Items)
+    -- First chat (13 green Sword Items)
     TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002")
     
     task.wait(2)
