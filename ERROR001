@@ -23,13 +23,13 @@ uiCorner.Parent = mainFrame
 
 --- BUTTONS ---
 
--- Left Button: Red Sword
+-- Left Button: Demon Lord Sword Hat
 local leftButton = Instance.new("TextButton")
 leftButton.Size = UDim2.new(0, 160, 0, 60)
 leftButton.Position = UDim2.new(0, 25, 0.5, -30)
 leftButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 leftButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-leftButton.Text = "Red Sword"
+leftButton.Text = "Demon Lord Sword Hat"
 leftButton.Font = Enum.Font.SourceSansBold
 leftButton.TextSize = 18
 leftButton.Parent = mainFrame
@@ -38,13 +38,13 @@ local leftCorner = Instance.new("UICorner")
 leftCorner.CornerRadius = UDim.new(0, 8)
 leftCorner.Parent = leftButton
 
--- Middle Button: Green Sword Hats (NEW)
+-- Middle Button: Toxic Lord Sword Hats (NEW)
 local middleButton = Instance.new("TextButton")
 middleButton.Size = UDim2.new(0, 160, 0, 60)
 middleButton.Position = UDim2.new(0.5, -80, 0.5, -30) -- Centered
 middleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 middleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-middleButton.Text = "Green Sword Hats"
+middleButton.Text = "Toxic Lord Sword Hats"
 middleButton.Font = Enum.Font.SourceSansBold
 middleButton.TextSize = 15 -- Slightly smaller text size to fit the name perfectly
 middleButton.TextWrapped = true
@@ -54,13 +54,13 @@ local middleCorner = Instance.new("UICorner")
 middleCorner.CornerRadius = UDim.new(0, 8)
 middleCorner.Parent = middleButton
 
--- Right Button: Green Sword Hat
+-- Right Button: Shadow man Hat
 local rightButton = Instance.new("TextButton")
 rightButton.Size = UDim2.new(0, 160, 0, 60)
 rightButton.Position = UDim2.new(1, -185, 0.5, -30)
 rightButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 rightButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-rightButton.Text = "Green Sword Hat"
+rightButton.Text = "Shadow man"
 rightButton.Font = Enum.Font.SourceSansBold
 rightButton.TextSize = 18
 rightButton.Parent = mainFrame
@@ -71,17 +71,17 @@ rightCorner.Parent = rightButton
 
 --- BUTTON ACTIONS ---
 
--- Function for green Sword Hat (Right Button)
+-- Function for Scary Cube Hat (Right Button)
 rightButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
     
-    -- First chat (13 green Sword Items)
-    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002")
+    -- First chat (13 BIG Scary Cube Items)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461")
     
     task.wait(2)
     
-    -- Second chat (13 more BIG Sword Items = 26 Total)
-    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002 5268720002")
+    -- Second chat (13 more BIG Shadow man Items = 26 Total)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461 85901474083461")
     
     task.wait(2)
     
@@ -91,17 +91,17 @@ rightButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Function for Red Sword Hats (Middle Button)
+-- Function for Moderation Hats (Middle Button)
 middleButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
     
     -- First chat (12 Hats - Fits perfectly within Roblox's 200-character limit)
-    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719")
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178")
     
     task.wait(2)
     
     -- Second chat (12 more Hats = 24 Total)
-    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719 5268555719")
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178 116085335944178")
     
     task.wait(2)
     
@@ -111,17 +111,17 @@ middleButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Function for Shadow people Hat (Left Button)
+-- Function Creepypasta Hat (Left Button)
 leftButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
     
-    -- First chat (16 Shadow people Hats)
-    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007")
+    -- First chat (16 Creepypasta)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861")
     
     task.wait(2)
     
-    -- Second chat (16 more Shadow people)
-    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007")
+    -- Second chat (16 more Creepypasta)
+    TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861 88898623574861")
     
     task.wait(2)
     
