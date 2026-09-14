@@ -23,13 +23,13 @@ uiCorner.Parent = mainFrame
 
 --- BUTTONS ---
 
--- Left Button: Demon Lord Sword Hat
+-- Left Button: Moderation Hat
 local leftButton = Instance.new("TextButton")
 leftButton.Size = UDim2.new(0, 160, 0, 60)
 leftButton.Position = UDim2.new(0, 25, 0.5, -30)
 leftButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 leftButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-leftButton.Text = "Demon Lord Sword Hat"
+leftButton.Text = "Moderation Hat"
 leftButton.Font = Enum.Font.SourceSansBold
 leftButton.TextSize = 18
 leftButton.Parent = mainFrame
@@ -38,7 +38,7 @@ local leftCorner = Instance.new("UICorner")
 leftCorner.CornerRadius = UDim.new(0, 8)
 leftCorner.Parent = leftButton
 
--- Middle Button: Toxic Lord Sword Hats (NEW)
+-- Middle Button: Scary Hats (NEW)
 local middleButton = Instance.new("TextButton")
 middleButton.Size = UDim2.new(0, 160, 0, 60)
 middleButton.Position = UDim2.new(0.5, -80, 0.5, -30) -- Centered
@@ -54,7 +54,7 @@ local middleCorner = Instance.new("UICorner")
 middleCorner.CornerRadius = UDim.new(0, 8)
 middleCorner.Parent = middleButton
 
--- Right Button: Shadow man Hat
+-- Right Button: Creepypasta Hat
 local rightButton = Instance.new("TextButton")
 rightButton.Size = UDim2.new(0, 160, 0, 60)
 rightButton.Position = UDim2.new(1, -185, 0.5, -30)
