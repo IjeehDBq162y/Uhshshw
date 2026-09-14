@@ -23,13 +23,13 @@ uiCorner.Parent = mainFrame
 
 --- BUTTONS ---
 
--- Left Button: Man Face Hat
+-- Left Button: Red Sword
 local leftButton = Instance.new("TextButton")
 leftButton.Size = UDim2.new(0, 160, 0, 60)
 leftButton.Position = UDim2.new(0, 25, 0.5, -30)
 leftButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 leftButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-leftButton.Text = "Man Face Hat"
+leftButton.Text = "Red Sword"
 leftButton.Font = Enum.Font.SourceSansBold
 leftButton.TextSize = 18
 leftButton.Parent = mainFrame
@@ -38,13 +38,13 @@ local leftCorner = Instance.new("UICorner")
 leftCorner.CornerRadius = UDim.new(0, 8)
 leftCorner.Parent = leftButton
 
--- Middle Button: Job Application Hats (NEW)
+-- Middle Button: Green Sword Hats (NEW)
 local middleButton = Instance.new("TextButton")
 middleButton.Size = UDim2.new(0, 160, 0, 60)
 middleButton.Position = UDim2.new(0.5, -80, 0.5, -30) -- Centered
 middleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 middleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-middleButton.Text = "Job Application Hats"
+middleButton.Text = "Green Sword Hats"
 middleButton.Font = Enum.Font.SourceSansBold
 middleButton.TextSize = 15 -- Slightly smaller text size to fit the name perfectly
 middleButton.TextWrapped = true
@@ -115,7 +115,7 @@ end)
 leftButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
     
-    -- First chat (16 Shadow people)
+    -- First chat (16 Shadow people Hats)
     TextChatService.TextChannels.RBXGeneral:SendAsync("-gh 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007 17853809007")
     
     task.wait(2)
