@@ -602,8 +602,8 @@ end)
 v_83()
 
 v_5:SetCore("SendNotification", {
-	Title = "Credits to Projeto LKB!",
-	Text = "Made by 2xyyy in 2024!",
+	Title = "Credits to Corrupted IjeehDBq!",
+	Text = "Made by 10101010 in 2026!",
 	Duration = 10
 })
 
