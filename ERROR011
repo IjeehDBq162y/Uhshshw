@@ -1,0 +1,618 @@
+local v_1  = game:GetService("Players")
+local v_2  = game:GetService("RunService")
+local v_3  = game:GetService("UserInputService")
+local v_4  = game:GetService("SoundService")
+local v_5  = game:GetService("StarterGui")
+local v_6  = game:GetService("TextChatService")
+local v_7  = v_1.LocalPlayer
+
+local v_8  = false
+local v_9  = nil
+local v_10 = false
+
+local function v_11(v_id)
+	local v_s = Instance.new("Sound")
+	v_s.SoundId = "rbxassetid://" .. v_id
+	v_s.Parent = v_4
+	v_s:Play()
+	v_s.Ended:Connect(function() v_s:Destroy() end)
+end
+
+v_11("2865227271")
+
+local v_12 = Instance.new("ScreenGui")
+v_12.Name = "SuperRingPartsGUI"
+v_12.ResetOnSpawn = false
+v_12.Parent = v_7:WaitForChild("PlayerGui")
+
+local v_13 = Instance.new("Frame")
+v_13.Size = UDim2.new(0, 330, 0.3, 290)
+v_13.Position = UDim2.new(0.5, -110, 0.5, -95)
+v_13.BackgroundColor3 = Color3.fromRGB(205, 170, 125)
+v_13.BorderSizePixel = 0
+v_13.Parent = v_12
+
+local v_14 = Instance.new("UIGradient")
+v_14.Color = ColorSequence.new({
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(205, 170, 125)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(139, 0, 0))
+})
+v_14.Rotation = 90
+v_14.Parent = v_13
+
+local v_15 = Instance.new("UICorner")
+v_15.CornerRadius = UDim.new(0, 20)
+v_15.Parent = v_13
+
+local v_16 = Instance.new("TextLabel")
+v_16.Size = UDim2.new(1, 0, 0, 40)
+v_16.Position = UDim2.new(0, 0, 0, 0)
+v_16.Text = "Super Modified Ring Parts!"
+v_16.TextColor3 = Color3.fromRGB(0, 0, 0)
+v_16.BackgroundColor3 = Color3.fromRGB(222, 216, 204)
+v_16.Font = Enum.Font.Fondamento
+v_16.TextSize = 22
+v_16.Parent = v_13
+
+local v_17 = Instance.new("UIGradient")
+v_17.Color = ColorSequence.new({
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(139, 0, 0)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 69, 69))
+})
+v_17.Rotation = 90
+v_17.Parent = v_16
+
+local v_18 = Instance.new("UICorner")
+v_18.CornerRadius = UDim.new(0, 20)
+v_18.Parent = v_16
+
+local v_19 = Instance.new("TextButton")
+v_19.Size = UDim2.new(0.8, 0, 0, 35)
+v_19.Position = UDim2.new(0.1, 0, 0.18, 0)
+v_19.Text = "Ring Parts Off"
+v_19.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_19.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_19.Font = Enum.Font.Fondamento
+v_19.TextSize = 18
+v_19.Parent = v_13
+
+local v_20 = Instance.new("UICorner")
+v_20.CornerRadius = UDim.new(0, 10)
+v_20.Parent = v_19
+
+local v_21 = Instance.new("TextButton")
+v_21.Size = UDim2.new(0.8, 0, 0, 35)
+v_21.Position = UDim2.new(0.1, 0, 0.27, 0)
+v_21.Text = "Transfer to Spectator"
+v_21.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_21.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_21.Font = Enum.Font.Fondamento
+v_21.TextSize = 18
+v_21.Parent = v_13
+
+local v_22 = Instance.new("UICorner")
+v_22.CornerRadius = UDim.new(0, 10)
+v_22.Parent = v_21
+
+local v_23 = Instance.new("TextButton")
+v_23.Size = UDim2.new(0.2, 0, 0, 35)
+v_23.Position = UDim2.new(0.1, 0, 0.35, 0)
+v_23.Text = "<"
+v_23.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_23.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_23.Font = Enum.Font.Fondamento
+v_23.TextSize = 18
+v_23.Parent = v_13
+
+local v_24 = Instance.new("UICorner")
+v_24.CornerRadius = UDim.new(0, 10)
+v_24.Parent = v_23
+
+local v_25 = Instance.new("TextButton")
+v_25.Size = UDim2.new(0.2, 0, 0, 35)
+v_25.Position = UDim2.new(0.7, 0, 0.35, 0)
+v_25.Text = ">"
+v_25.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_25.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_25.Font = Enum.Font.Fondamento
+v_25.TextSize = 18
+v_25.Parent = v_13
+
+local v_26 = Instance.new("UICorner")
+v_26.CornerRadius = UDim.new(0, 10)
+v_26.Parent = v_25
+
+local v_27 = Instance.new("TextLabel")
+v_27.Size = UDim2.new(0.4, 0, 0, 35)
+v_27.Position = UDim2.new(0.3, 0, 0.44, 0)
+v_27.Text = "Speed: 50"
+v_27.BackgroundColor3 = Color3.fromRGB(210, 180, 140)
+v_27.TextColor3 = Color3.fromRGB(101, 67, 33)
+v_27.Font = Enum.Font.Fondamento
+v_27.TextSize = 18
+v_27.Parent = v_13
+
+local v_28 = Instance.new("UICorner")
+v_28.CornerRadius = UDim.new(0, 10)
+v_28.Parent = v_27
+
+local v_29 = Instance.new("TextButton")
+v_29.Size = UDim2.new(0.2, 0, 0, 35)
+v_29.Position = UDim2.new(0.1, 0, 0.44, 0)
+v_29.Text = "<"
+v_29.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_29.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_29.Font = Enum.Font.Fondamento
+v_29.TextSize = 18
+v_29.Parent = v_13
+
+local v_30 = Instance.new("UICorner")
+v_30.CornerRadius = UDim.new(0, 10)
+v_30.Parent = v_29
+
+local v_31 = Instance.new("TextButton")
+v_31.Size = UDim2.new(0.2, 0, 0, 35)
+v_31.Position = UDim2.new(0.7, 0, 0.44, 0)
+v_31.Text = ">"
+v_31.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_31.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_31.Font = Enum.Font.Fondamento
+v_31.TextSize = 18
+v_31.Parent = v_13
+
+local v_32 = Instance.new("UICorner")
+v_32.CornerRadius = UDim.new(0, 10)
+v_32.Parent = v_31
+
+local v_33 = Instance.new("TextLabel")
+v_33.Size = UDim2.new(0.4, 0, 0, 35)
+v_33.Position = UDim2.new(0.3, 0, 0.35, 0)
+v_33.Text = "Radius: 50"
+v_33.BackgroundColor3 = Color3.fromRGB(210, 180, 140)
+v_33.TextColor3 = Color3.fromRGB(101, 67, 33)
+v_33.Font = Enum.Font.Fondamento
+v_33.TextSize = 18
+v_33.Parent = v_13
+
+local v_34 = Instance.new("UICorner")
+v_34.CornerRadius = UDim.new(0, 10)
+v_34.Parent = v_33
+
+local v_35 = Instance.new("TextLabel")
+v_35.Size = UDim2.new(0.4, 0, 0, 35)
+v_35.Position = UDim2.new(0.3, 0, 0.53, 0)
+v_35.Text = "Height: 100"
+v_35.BackgroundColor3 = Color3.fromRGB(210, 180, 140)
+v_35.TextColor3 = Color3.fromRGB(101, 67, 33)
+v_35.Font = Enum.Font.Fondamento
+v_35.TextSize = 18
+v_35.Parent = v_13
+
+local v_36 = Instance.new("UICorner")
+v_36.CornerRadius = UDim.new(0, 10)
+v_36.Parent = v_35
+
+local v_37 = Instance.new("TextButton")
+v_37.Size = UDim2.new(0.2, 0, 0, 35)
+v_37.Position = UDim2.new(0.1, 0, 0.53, 0)
+v_37.Text = "<"
+v_37.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_37.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_37.Font = Enum.Font.Fondamento
+v_37.TextSize = 18
+v_37.Parent = v_13
+
+local v_38 = Instance.new("UICorner")
+v_38.CornerRadius = UDim.new(0, 10)
+v_38.Parent = v_37
+
+local v_39 = Instance.new("TextButton")
+v_39.Size = UDim2.new(0.2, 0, 0, 35)
+v_39.Position = UDim2.new(0.7, 0, 0.53, 0)
+v_39.Text = ">"
+v_39.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_39.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_39.Font = Enum.Font.Fondamento
+v_39.TextSize = 18
+v_39.Parent = v_13
+
+local v_40 = Instance.new("UICorner")
+v_40.CornerRadius = UDim.new(0, 10)
+v_40.Parent = v_39
+
+local v_41 = Instance.new("TextButton")
+v_41.Size = UDim2.new(0.2, 0, 0, 35)
+v_41.Position = UDim2.new(0.7, 0, 0.8, 0)
+v_41.Text = "Noclip"
+v_41.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_41.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_41.Font = Enum.Font.Fondamento
+v_41.TextSize = 18
+v_41.Parent = v_13
+
+local v_42 = Instance.new("UICorner")
+v_42.CornerRadius = UDim.new(0, 10)
+v_42.Parent = v_41
+
+local v_43 = Instance.new("TextButton")
+v_43.Size = UDim2.new(0.2, 0, 0, 35)
+v_43.Position = UDim2.new(0.48, 0, 0.8, 0)
+v_43.Text = "No FallDMG"
+v_43.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
+v_43.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_43.Font = Enum.Font.Fondamento
+v_43.TextSize = 14
+v_43.Parent = v_13
+
+local v_44 = Instance.new("UICorner")
+v_44.CornerRadius = UDim.new(0, 10)
+v_44.Parent = v_43
+
+local v_45 = Instance.new("TextButton")
+v_45.Size = UDim2.new(0.2, 0, 0, 35)
+v_45.Position = UDim2.new(0.48, 0, 0.72, 0)
+v_45.Text = "Infinite Yield"
+v_45.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
+v_45.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_45.Font = Enum.Font.Fondamento
+v_45.TextSize = 14
+v_45.Parent = v_13
+
+local v_46 = Instance.new("UICorner")
+v_46.CornerRadius = UDim.new(0, 10)
+v_46.Parent = v_45
+
+local v_47 = Instance.new("TextButton")
+v_47.Size = UDim2.new(0.2, 0, 0, 35)
+v_47.Position = UDim2.new(0.7, 0, 0.72, 0.5)
+v_47.Text = "Fly"
+v_47.BackgroundColor3 = Color3.fromRGB(186, 85, 211)
+v_47.TextColor3 = Color3.fromRGB(240, 255, 255)
+v_47.Font = Enum.Font.Fondamento
+v_47.TextSize = 18
+v_47.Parent = v_13
+
+local v_48 = Instance.new("UICorner")
+v_48.CornerRadius = UDim.new(0, 10)
+v_48.Parent = v_47
+
+local v_49 = Instance.new("TextLabel")
+v_49.Size = UDim2.new(0.4, 0, 0, 35)
+v_49.Position = UDim2.new(0.04, 0, 0.8, 0)
+v_49.Text = "FPS: Calculating..."
+v_49.BackgroundColor3 = Color3.fromRGB(210, 180, 140)
+v_49.TextColor3 = Color3.fromRGB(101, 67, 33)
+v_49.Font = Enum.Font.Fondamento
+v_49.TextSize = 18
+v_49.Parent = v_13
+
+local v_50 = Instance.new("UICorner")
+v_50.CornerRadius = UDim.new(0, 10)
+v_50.Parent = v_49
+
+local v_51 = Instance.new("TextLabel")
+v_51.Size = UDim2.new(1, 0, 0, 20)
+v_51.Position = UDim2.new(0, 0, 1, -20)
+v_51.Text = "https://scriptblox.com/u/Projeto_LKB"
+v_51.TextColor3 = Color3.fromRGB(255, 255, 255)
+v_51.BackgroundTransparency = 1
+v_51.Font = Enum.Font.Fondamento
+v_51.TextSize = 14
+v_51.Parent = v_13
+
+local v_52 = Instance.new("TextButton")
+v_52.Size = UDim2.new(0, 30, 0, 30)
+v_52.Position = UDim2.new(1, -35, 0, 5)
+v_52.Text = "-"
+v_52.BackgroundColor3 = Color3.fromRGB(255, 85, 127)
+v_52.TextColor3 = Color3.fromRGB(255, 248, 220)
+v_52.Font = Enum.Font.Fondamento
+v_52.TextSize = 18
+v_52.Parent = v_13
+
+local v_53 = Instance.new("UICorner")
+v_53.CornerRadius = UDim.new(0, 15)
+v_53.Parent = v_52
+
+local v_54 = false
+v_52.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_54 = not v_54
+	if v_54 then
+		v_13:TweenSize(UDim2.new(-0.10, 330, 0, 40), "Out", "Quad", 0.5, true)
+		v_52.Text = "+"
+		for _, v_el in ipairs({
+			v_16, v_19, v_23, v_25, v_33, v_29, v_31, v_27,
+			v_51, v_41, v_49, v_43, v_21, v_47, v_45, v_37, v_39, v_35
+		}) do v_el.Visible = false end
+	else
+		v_13:TweenSize(UDim2.new(0, 330, 0.3, 290), "Out", "Quad", 0.3, true)
+		v_52.Text = "-"
+		for _, v_el in ipairs({
+			v_16, v_19, v_23, v_25, v_33, v_29, v_31, v_27,
+			v_51, v_41, v_49, v_43, v_21, v_47, v_45, v_37, v_39, v_35
+		}) do v_el.Visible = true end
+	end
+end)
+
+local v_55 = false
+local v_56 = nil
+local v_57 = nil
+local v_58 = nil
+
+local function v_59(v_in)
+	local v_delta = v_in.Position - v_57
+	v_13.Position = UDim2.new(v_58.X.Scale, v_58.X.Offset + v_delta.X, v_58.Y.Scale, v_58.Y.Offset + v_delta.Y)
+end
+
+v_13.InputBegan:Connect(function(v_in)
+	if v_in.UserInputType == Enum.UserInputType.MouseButton1 or v_in.UserInputType == Enum.UserInputType.Touch then
+		v_55 = true
+		v_57 = v_in.Position
+		v_58 = v_13.Position
+		v_in.Changed:Connect(function()
+			if v_in.UserInputState == Enum.UserInputState.End then v_55 = false end
+		end)
+	end
+end)
+
+v_13.InputChanged:Connect(function(v_in)
+	if v_in.UserInputType == Enum.UserInputType.MouseMovement or v_in.UserInputType == Enum.UserInputType.Touch then
+		v_56 = v_in
+	end
+end)
+
+v_3.InputChanged:Connect(function(v_in)
+	if v_in == v_56 and v_55 then v_59(v_in) end
+end)
+
+if not getgenv().Network then
+	getgenv().Network = {
+		BaseParts = {},
+		Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
+	}
+	Network.RetainPart = function(v_part)
+		if typeof(v_part) == "Instance" and v_part:IsA("BasePart") and v_part:IsDescendantOf(workspace) then
+			table.insert(Network.BaseParts, v_part)
+			v_part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+			v_part.CanCollide = false
+		end
+	end
+	local function v_enableNet()
+		v_7.ReplicationFocus = workspace
+		v_2.Heartbeat:Connect(function()
+			sethiddenproperty(v_7, "SimulationRadius", math.huge)
+			for _, v_part in pairs(Network.BaseParts) do
+				if v_part:IsDescendantOf(workspace) then
+					v_part.Velocity = Network.Velocity
+				end
+			end
+		end)
+	end
+	v_enableNet()
+end
+
+local v_60 = 50
+local v_61 = 100
+local v_62 = 10
+local v_63 = 1000
+local v_64 = false
+local v_65 = {}
+
+local function v_66(v_disp)
+	if v_disp then v_disp.Text = "Height: " .. tostring(v_61) end
+end
+
+local function v_67(v_part)
+	if v_part:IsA("BasePart") and not v_part.Anchored and v_part:IsDescendantOf(workspace) then
+		if v_part.Parent == v_7.Character or v_part:IsDescendantOf(v_7.Character) then return false end
+		v_part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+		v_part.CanCollide = false
+		table.insert(v_65, v_part)
+		return true
+	end
+	return false
+end
+
+local function v_68(v_part)
+	if v_67(v_part) then
+		if not table.find(v_65, v_part) then table.insert(v_65, v_part) end
+	end
+end
+
+local function v_69(v_part)
+	local v_idx = table.find(v_65, v_part)
+	if v_idx then table.remove(v_65, v_idx) end
+end
+
+for _, v_part in pairs(workspace:GetDescendants()) do v_68(v_part) end
+workspace.DescendantAdded:Connect(v_68)
+workspace.DescendantRemoving:Connect(v_69)
+
+local v_70 = Vector3.new(-280, 179, 342)
+local v_71 = false
+
+v_2.Heartbeat:Connect(function()
+	if not v_64 then return end
+	local v_center
+	if v_71 then
+		v_center = v_70
+	else
+		local v_root = v_7.Character and v_7.Character:FindFirstChild("HumanoidRootPart")
+		v_center = v_root and v_root.Position
+	end
+	if v_center then
+		for _, v_part in pairs(v_65) do
+			if v_part.Parent and not v_part.Anchored then
+				local v_pos = v_part.Position
+				local v_angle = math.atan2(v_pos.Z - v_center.Z, v_pos.X - v_center.X)
+				local v_newAngle = v_angle + math.rad(v_62)
+				local v_dist = (Vector3.new(v_pos.X, v_center.Y, v_pos.Z) - v_center).Magnitude
+				local v_target = Vector3.new(
+					v_center.X + math.cos(v_newAngle) * math.min(v_60, v_dist),
+					v_center.Y + (v_61 * math.abs(math.sin((v_pos.Y - v_center.Y) / v_61))),
+					v_center.Z + math.sin(v_newAngle) * math.min(v_60, v_dist)
+				)
+				v_part.Velocity = (v_target - v_part.Position).unit * v_63
+			end
+		end
+	end
+end)
+
+local v_72 = nil
+
+local function v_73()
+	v_72 = false
+	local function v_loop()
+		if v_72 == false and v_7.Character ~= nil then
+			for _, v_p in pairs(v_7.Character:GetDescendants()) do
+				if v_p:IsA("BasePart") and v_p.CanCollide then
+					v_p.CanCollide = false
+				end
+			end
+		end
+		wait(0.21)
+	end
+	v_9 = game:GetService("RunService").Stepped:Connect(v_loop)
+end
+
+local function v_74()
+	if v_9 then v_9:Disconnect() end
+	v_72 = true
+end
+
+local v_75 = tick()
+local v_76 = 0
+
+v_2.RenderStepped:Connect(function()
+	local v_now = tick()
+	v_76 = math.floor(1 / (v_now - v_75))
+	v_75 = v_now
+	v_49.Text = "FPS: " .. tostring(v_76)
+end)
+
+local v_77 = v_2.Heartbeat
+local v_78 = v_2.RenderStepped
+local v_79 = Vector3.zero
+
+local function v_80(v_chr)
+	if not v_chr then return end
+	local v_root = v_chr:WaitForChild("HumanoidRootPart", 5)
+	if not v_root then return end
+	local v_con
+	v_con = v_77:Connect(function()
+		if not v_root.Parent then v_con:Disconnect() return end
+		local v_old = v_root.AssemblyLinearVelocity
+		v_root.AssemblyLinearVelocity = v_79
+		v_78:Wait()
+		v_root.AssemblyLinearVelocity = v_old
+	end)
+end
+
+local function v_81()
+	local v_url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"
+	local v_ok, v_err = pcall(function() loadstring(game:HttpGet(v_url))() end)
+	if not v_ok then warn("Failed to execute script: " .. v_err) end
+end
+
+local function v_82()
+	local v_url = "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"
+	local v_ok, v_err = pcall(function() loadstring(game:HttpGet(v_url))() end)
+	if not v_ok then warn("Failed to execute Fly script: " .. v_err) end
+end
+
+v_37.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_61 = math.max(10, v_61 - 10)
+	v_66(v_35)
+end)
+
+v_39.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_61 = v_61 + 10
+	v_66(v_35)
+end)
+
+v_47.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_82()
+end)
+
+v_45.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_81()
+end)
+
+v_21.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_71 = not v_71
+	v_21.Text = v_71 and "Return to Player" or "Transfer to Spectator"
+	v_21.BackgroundColor3 = v_71 and Color3.fromRGB(50, 205, 50) or Color3.fromRGB(139, 69, 19)
+end)
+
+v_43.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_80(v_7.Character)
+	v_7.CharacterAdded:Connect(v_80)
+end)
+
+v_41.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_8 = not v_8
+	v_41.Text = v_8 and "Un-Noclip" or "Noclip"
+	v_41.BackgroundColor3 = v_8 and Color3.fromRGB(50, 205, 50) or Color3.fromRGB(139, 69, 19)
+	if v_8 then v_73() else v_74() end
+end)
+
+v_19.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_64 = not v_64
+	v_19.Text = v_64 and "Ring Parts On" or "Ring Parts Off"
+	v_19.BackgroundColor3 = v_64 and Color3.fromRGB(50, 205, 50) or Color3.fromRGB(160, 82, 45)
+end)
+
+v_23.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_60 = math.max(10, v_60 - 5)
+	v_33.Text = "Radius: " .. v_60
+end)
+
+v_25.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_60 = math.min(100, v_60 + 5)
+	v_33.Text = "Radius: " .. v_60
+end)
+
+local function v_83()
+	v_27.Text = "Speed: " .. v_62
+end
+
+v_29.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_62 = math.max(1, v_62 - 1)
+	v_83()
+end)
+
+v_31.MouseButton1Click:Connect(function()
+	v_11("12221967")
+	v_62 = math.min(100, v_62 + 1)
+	v_83()
+end)
+
+v_83()
+
+v_5:SetCore("SendNotification", {
+	Title = "Credits to Projeto LKB!",
+	Text = "Made by 2xyyy in 2024!",
+	Duration = 10
+})
+
+local function v_84(v_msg)
+	if v_6.ChatVersion == Enum.ChatVersion.TextChatService then
+		v_6.TextChannels.RBXGeneral:SendAsync(v_msg)
+	else
+		game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(v_msg, "All")
+	end
+end
+
+v_84("ðŸŽ‡ Ring Parts Modified Executed! ðŸŽ‡")
