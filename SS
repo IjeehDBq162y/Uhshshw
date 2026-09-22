@@ -1,0 +1,198 @@
+local gui = Instance.new("ScreenGui")
+gui.Name = "Infinite yield ss"
+gui.Parent = game.CoreGui
+
+local inf = Instance.new("Frame")
+inf.Size = UDim2.new(0.6, 25, 0.8, 0)
+inf.Position = UDim2.new(0.2, 10, 0.0, 5)
+inf.BackgroundColor3 = Color3.new(0, 0, 0)
+inf.BorderColor3 = Color3.new(0, 0, 0)
+inf.BorderSizePixel = 0
+inf.Active = true
+inf.BackgroundTransparency = 0 
+inf.Draggable = true
+inf.Parent = gui
+inf.Visible = true
+
+local whiteinf = Instance.new("Frame")
+whiteinf.Size = UDim2.new(0.9, 47, 0.9, 24)
+whiteinf.Position = UDim2.new(0.0, 0, 0.0, 0)
+whiteinf.BackgroundColor3 = Color3.new(1, 1, 1)
+whiteinf.BorderColor3 = Color3.new(0, 0, 0)
+whiteinf.BorderSizePixel = 0
+whiteinf.Active = failed
+whiteinf.BackgroundTransparency = 0.9
+whiteinf.Draggable = true
+whiteinf.Parent = inf
+
+local Intext = Instance.new("TextLabel")
+Intext.Size = UDim2.new(0.9, 47, 0.1, 0)
+Intext.Position = UDim2.new(0.0, 0, 0.0, 0)
+Intext.BackgroundColor3 = Color3.new(1, 1, 1)
+Intext.BorderColor3 = Color3.new(0, 0, 0)
+Intext.BorderSizePixel = 0
+Intext.Text = "Infinite yield by MediaProject [beta]"
+Intext.BackgroundTransparency = 1
+Intext.TextColor3 = Color3.new(255, 255, 255)
+Intext.Font = Enum.Font.Code
+Intext.Parent = whiteinf
+Intext.TextSize = 15
+
+local inf2 = Instance.new("Frame")
+inf2.Size = UDim2.new(0.7, 27, 0.1, 0)
+inf2.Position = UDim2.new(0.0, 3, 0.0, 26)
+inf2.BackgroundColor3 = Color3.new(1, 1, 1)
+inf2.BorderColor3 = Color3.new(0, 0, 0)
+inf2.BorderSizePixel = 1
+inf2.Active = failed
+inf2.BackgroundTransparency = 0.9
+inf2.Draggable = true
+inf2.Parent = whiteinf
+
+local search = Instance.new("TextBox")
+search.Size = UDim2.new(0.8, 40, 0.9, 3)
+search.Position = UDim2.new(0.0, 29, 0.0, 0)
+search.BackgroundColor3 = Color3.new(1, 1, 1)
+search.BorderColor3 = Color3.new(0, 0, 0)
+search.BorderSizePixel = 1
+search.Text = "Search"
+search.TextColor3 = Color3.new(1, 1, 1)
+search.BackgroundTransparency = 1
+search.Font = Enum.Font.Code
+search.TextSize = 15
+search.Parent = inf2
+search.TextXAlignment = Enum.TextXAlignment.Left
+
+local Scrinf = Instance.new("ScrollingFrame")
+Scrinf.Size = UDim2.new(0.7, 24, 0.7, 19)
+Scrinf.Position = UDim2.new(0.0, 4, 0.2, 4)
+Scrinf.BackgroundColor3 = Color3.new(1, 1, 1)
+Scrinf.BorderColor3 = Color3.new(0, 0, 0)
+Scrinf.BorderSizePixel = 1
+Scrinf.Parent = whiteinf
+
+Scrinf.BackgroundTransparency = 0.9
+
+local TextLabel4 = Instance.new("TextLabel")
+TextLabel4.Size = UDim2.new(0.9, 39, 0.0, 19)
+TextLabel4.Position = UDim2.new(0.0, 0, 0.0, 0)
+TextLabel4.BackgroundColor3 = Color3.new(0, 0, 0)
+TextLabel4.BorderColor3 = Color3.new(0, 0, 0)
+TextLabel4.BorderSizePixel = 1
+TextLabel4.Text = "c00lgui"
+TextLabel4.BackgroundTransparency = 1
+TextLabel4.TextColor3 = Color3.new(1, 1, 1)
+TextLabel4.Font = Enum.Font.Code
+TextLabel4.Parent = Scrinf
+TextLabel4.TextSize = 19
+TextLabel4.TextXAlignment = Enum.TextXAlignment.Left
+
+local command = Instance.new("TextButton")
+command.Size = UDim2.new(0.2, 12, 0.1, 0)
+command.Position = UDim2.new(0.7, 32, 0.1, 2)
+command.BackgroundColor3 = Color3.new(1, 1, 1)
+command.BorderColor3 = Color3.new(0, 0, 0)
+command.BorderSizePixel = 1
+command.Text = "command"
+command.BackgroundTransparency = 0.9
+command.TextColor3 = Color3.new(1, 1, 1)
+command.Font = Enum.Font.Code
+command.Parent = whiteinf
+command.TextSize = 19
+
+local cmds = Instance.new("Frame")
+cmds.Size = UDim2.new(0.3, 19, 0.7, 0)
+cmds.Position = UDim2.new(0.0, 5, 0.3, 0)
+cmds.BackgroundColor3 = Color3.new(0, 0, 0)
+cmds.BorderColor3 = Color3.new(0, 0, 0)
+cmds.BorderSizePixel = 1
+cmds.Active = failed
+cmds.BackgroundTransparency = 0 
+cmds.Draggable = true
+cmds.Parent = gui
+
+local cmds1 = Instance.new("Frame")
+cmds1.Size = UDim2.new(0.9, 24, 0.9, 21) 
+cmds1.Position = UDim2.new(0.0, 0, 0.0, 0)
+cmds1.BackgroundColor3 = Color3.new(1, 1, 1)
+cmds1.BorderColor3 = Color3.new(1, 1, 1)
+cmds1.BorderSizePixel = 0
+cmds1.Active = failed
+cmds1.BackgroundTransparency = 0.8
+cmds1.Draggable = true
+cmds1.Parent = cmds
+
+local TextLabel4 = Instance.new("TextLabel")
+TextLabel4.Size = UDim2.new(0.9, 24, 0.0, 19)
+TextLabel4.Position = UDim2.new(0.0, 0, 0.0, 0)
+TextLabel4.BackgroundColor3 = Color3.new(0, 0, 0)
+TextLabel4.BorderColor3 = Color3.new(0, 0, 0)
+TextLabel4.BorderSizePixel = 1
+TextLabel4.Text = "Suggestions"
+TextLabel4.BackgroundTransparency = 0.5
+TextLabel4.TextColor3 = Color3.new(1, 1, 1)
+TextLabel4.Font = Enum.Font.Code
+TextLabel4.Parent = cmds1
+TextLabel4.TextSize = 19
+
+local red = Instance.new("TextButton")
+red.Size = UDim2.new(0.0, 24, 0.8, 2)
+red.Position = UDim2.new(0.9, 20, 0.0, 2)
+red.BackgroundColor3 = Color3.new(1, 0, 0)
+red.BorderColor3 = Color3.new(0, 0, 0)
+red.BorderSizePixel = 0
+red.Text = ""
+red.BackgroundTransparency = 0 
+red.TextColor3 = Color3.new(255, 255, 255)
+red.Font = Enum.Font.Code
+red.Parent = Intext
+
+local cmds3 = Instance.new("TextBox")
+cmds3.Size = UDim2.new(0.3, 0, 0.0, 23)
+cmds3.Position = UDim2.new(0.7, 0, 0.9, 12)
+cmds3.BackgroundColor3 = Color3.new(0, 0, 0)
+cmds3.BorderColor3 = Color3.new(0, 0, 0)
+cmds3.BorderSizePixel = 0
+cmds3.Text = "Command Bar"
+cmds3.TextColor3 = Color3.new(1, 1, 1)
+cmds3.BackgroundTransparency = 0
+cmds3.Font = Enum.Font.Code
+cmds3.TextSize = 19
+cmds3.Parent = gui
+
+whiteinf.Visible = failed
+wait(1)
+whiteinf.Visible = true
+
+red.MouseButton1Click:Connect(function()
+whiteinf.Visible = failed
+inf:TweenSize(UDim2.new(0.0, 0, 0.0, 19), "Out", "Quint")
+wait(0.9)
+inf.Visible = failed
+end)
+
+cmds3.FocusLost:Connect(function(enterPressed)
+if enterPressed then
+        local code = cmds3.Text
+    if code == "cmds" then
+inf.Visible = true
+whiteinf.Visible = true
+inf:TweenSize(UDim2.new(0.6, 19, 0.8, 0), "Out", "Quint")
+cmds3.Text = "Command Bar"
+cmds:TweenPosition(UDim2.new(0.0, 5, 0.3, 0),"Out","Quad")
+wait(3)
+cmds:TweenPosition(UDim2.new(0.0, 5, 0.9, 55),"Out","Quad")
+end
+
+    if code == "c00lgui" then
+cmds3.Text = "Command Bar"
+wait(1)
+loadstring(game:GetObjects("rbxassetid://8127297852")[1].Source)()
+cmds:TweenPosition(UDim2.new(0.0, 5, 0.3, 0),"Out","Quad")
+wait(3)
+cmds:TweenPosition(UDim2.new(0.0, 5, 0.9, 55),"Out","Quad")
+end
+end
+end)
+
+cmds:TweenPosition(UDim2.new(0.0, 5, 0.9, 55),"Out","Quad")
