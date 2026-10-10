@@ -1,0 +1,1120 @@
+-- CONFIGURATION --
+-- To modify these, go into the 'Configuration' Folder and change the values.  
+repeat wait(0) until script:FindFirstChild("Configuration")
+local Configuration = script:FindFirstChild("Configuration")
+
+local AllowChatReset = Configuration.AllowChatReset.Value                   -- If set to true, players can say 'Reset' or 'Respawn', etc, and be respawned. 
+local AllowChatCommands = Configuration.AllowChatCommands.Value             -- Allows you to use kill/ or explode/, etc. too.  
+local BestFriendsAdmin = Configuration.BestFriendsAdmin.Value               -- If true, all your 'Best Friends' will be friends
+local FriendsModerator = Configuration.FriendsModerator.Value               -- If true, all your 'Best Friends' will be friends
+local AdminGroupID = Configuration.AdminGroupID.Value                       -- Anyone in this group
+
+local AdminGroups = { -- Anyone in these groups will be added as an admin.  
+	00000000;
+	00000000;
+	00000000;
+	00000000;
+	00000000;
+	00000000;
+	00000000;
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------- E N D    O F     S I M P L E     E D I T I N G    O F    Q U E N T Y    A D M I N S ------------- E N D    O F     S I M P L E     E D I T I N G    O F    Q U E N T Y    A D M I N S ------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Past this point, tamper, but if it breaks, it's not my fault. D:
+
+-- Update --
+local _G,_VERSION,assert,collectgarbage,dofile,error,getfenv,getmetatable,ipairs,load,loadfile,loadstring,next,pairs,pcall,print,rawequal,rawget,rawset,select,setfenv,setmetatable,tonumber,tostring,type,unpack,xpcall,coroutine,math,string,table,game,Game,workspace,Workspace,delay,Delay,LoadLibrary,printidentity,Spawn,tick,time,version,Version,Wait,wait,PluginManager,crash__,LoadRobloxLibrary,settings,Stats,stats,UserSettings,Enum,Color3,BrickColor,Vector2,Vector3,Vector3int16,CFrame,UDim,UDim2,Ray,Axes,Faces,Instance,Region3,Region3int16=_G,_VERSION,assert,collectgarbage,dofile,error,getfenv,getmetatable,ipairs,load,loadfile,loadstring,next,pairs,pcall,print,rawequal,rawget,rawset,select,setfenv,setmetatable,tonumber,tostring,type,unpack,xpcall,coroutine,math,string,table,game,Game,workspace,Workspace,delay,Delay,LoadLibrary,printidentity,Spawn,tick,time,version,Version,Wait,wait,PluginManager,crash__,LoadRobloxLibrary,settings,Stats,stats,UserSettings,Enum,Color3,BrickColor,Vector2,Vector3,Vector3int16,CFrame,UDim,UDim2,Ray,Axes,Faces,Instance,Region3,Region3int16
+math.randomseed(tick())
+
+local UpdateTimeOutTime = 60 -- Time the script has until it stops trying to update, incase the update errors.  
+local UpdateAttempt = false
+local UpdateStartTime = tick()
+local CurrentVersion = script.QuentyAdminCurrentVersion.Value
+local Admins = script.Admins
+
+Spawn(function()
+	local Attempt = game:GetService("InsertService"):LoadAsset(86681103)
+	if Attempt and Attempt:IsA("Model") then
+		local AdminScript = Attempt:FindFirstChild("QuentyAdminCommands")
+		if AdminScript and AdminScript:IsA("Script") then
+			local CurrentVersionValue = AdminScript:FindFirstChild("QuentyAdminCurrentVersion")
+			local AdminConfiguration = AdminScript:FindFirstChild("Configuration") -- Gotta save the values.  
+			local AdminAdminsContainer = AdminScript:FindFirstChild("Admins") -- And save admins...
+
+			if CurrentVersionValue and CurrentVersionValue:IsA("NumberValue") and AdminConfiguration and AdminAdminsContainer then
+				if CurrentVersionValue.Value > CurrentVersion then
+					--print("Auto updating")
+					for _, Item in pairs(AdminConfiguration:GetChildren()) do
+						if Configuration:FindFirstChild(Item.Name) and Configuration[Item.Name]:IsA(Item.ClassName) then
+							AdminConfiguration[Item.Name].Value = Configuration[Item.Name].Value
+						else
+							print("Weird value found in configuration")
+						end
+					end
+					AdminAdminsContainer:ClearAllChildren() -- Wipe....
+
+					for _, Item in pairs(Admins:GetChildren()) do
+						Item:Clone().Parent = AdminAdminsContainer
+					end
+					AdminScript.Parent = Workspace
+					--print("Done autoupdating")
+					script:Destroy() -- Destroy one's self. :D
+				else
+					print("Version is up to date")
+					Attempt:Destroy();
+				end
+			else
+				print("Error in identifying key values in loaded script")
+			end
+		end
+	else
+		print("Error in insert attempt")
+	end
+	UpdateAttempt = true;
+end)
+
+repeat wait(0) print("Waiting for autoupdate attempt") until UpdateAttempt or tick() - UpdateStartTime > UpdateTimeOutTime 
+print("Update complete")
+
+-- SCRIPT --
+
+local function WaitForDescendent(Parent, Name)
+	local Item = Parent:FindFirstChild(Name)
+	if not Item then
+		repeat wait(0) Item = Parent:FindFirstChild(Name) print("Waiting for "..Name) until Item
+	end
+	return Item;
+end
+
+--local AdminList = {"xxxGhostxxxx", "AnotherPlayer", "Telamonster", "Player"}
+
+
+
+-- Variables --
+local Players = Game:GetService('Players')
+local StarterPack = Game:GetService('StarterPack')
+local StarterGui = Game:GetService('StarterGui')
+local Lighting = Game:GetService('Lighting')
+local Debris = Game:GetService('Debris')
+local Teams = Game:GetService('Teams')
+local BadgeService = Game:GetService('BadgeService')
+local InsertService = Game:GetService('InsertService')
+local Terrain = Workspace.Terrain
+
+local Noobtags = {}
+
+local PlayerConnectionCommands = {}
+local PlayerNotifications = {}
+
+--local RbxGui = assert(LoadLibrary('RbxGui'))
+local RbxUtility = assert(LoadLibrary('RbxUtility'))
+--local RbxStatus = assert(LoadLibrary('RbxStatus'))
+--local RbxGear = assert(LoadLibrary('RbxGear'))
+--local RbxStamper = assert(LoadLibrary('RbxStamper'))
+
+script.Name = "QuentyAdminCommands" -- Needs to stay this way to work.  
+
+local Commands = WaitForDescendent(script, "QuentyGuiAdminCommands")
+
+local Notification =  WaitForDescendent(script, "QuentyGuiAdminNotice"):Clone()
+local Caper = WaitForDescendent(script, "QuentyGuiAdmin:Capes"):Clone()
+local Blinder = WaitForDescendent(script, "QuentyGuiAdminBlind"):Clone()
+local Preload = WaitForDescendent(script, "QuentyGuiAdmin:Preload"):Clone()
+local MainCache = game:GetService("Lighting"):FindFirstChild("QuentyAdminCache")
+local PlaySoundScript = WaitForDescendent(script, "QuentyGuiAdmin:PlaySound"):Clone()
+local GameProt = WaitForDescendent(script, "QuentyGuiAdmin:Operation"):Clone()
+local CrashScript = WaitForDescendent(script, "QuentyGuiAdmin:Crash"):Clone()
+
+if not MainCache then
+	MainCache = Instance.new("Model", game:GetService("Lighting"))
+	MainCache.Name = "QuentyAdminCache"
+end
+
+local ToolCache = MainCache:FindFirstChild("QuentyAdminToolCache")
+local HatCache = MainCache:FindFirstChild("QuentyAdminHatCache")
+if not ToolCache then
+	ToolCache = Instance.new("Model", MainCache)
+	ToolCache.Name = "QuentyAdminToolCache"
+end
+
+if not HatCache then
+	HatCache = Instance.new("Model", MainCache)
+	HatCache.Name = "QuentyAdminHatCache"
+end
+
+-- Functions --
+
+
+
+
+
+
+
+
+
+local function Modify(instance, t)
+	for key, value in next, t do
+		if type(key) == 'number' then
+			value.Parent = instance 
+		else
+			instance[key] = value
+		end
+	end
+	return instance
+end
+
+
+
+
+
+local function PlaySound(Player, ID)
+	if Player and Player:FindFirstChild("PlayerGui") then
+		local NewSoundPlay = PlaySoundScript:Clone()
+		NewSoundPlay.SoundVal.Value = ID
+		NewSoundPlay.Parent = Player.PlayerGui
+		NewSoundPlay.Disabled = false
+	end
+end
+
+
+
+
+
+
+local function GiveAdmin(Player)
+	if Player and Player:IsA("Player") and Player:FindFirstChild("PlayerGui") then
+		if Player.PlayerGui:FindFirstChild("QuentyGuiAdminCommands") then
+			Player.PlayerGui.QuentyGuiAdminCommands:Destroy();
+		end
+		Commands:Clone().Parent = Player.PlayerGui
+	else
+		print("Player was invalid")
+	end
+end
+
+
+
+
+
+local function Noobify(Character, Head, Torso, LeftLeg, RightLeg, RightArm, LeftArm, TagName, Zombie, Decal, Face)
+	Decal = Decal or ""
+	Spawn(function()
+
+		local function CheckTag(Name)
+			for XTag, _ in pairs(Noobtags) do
+				if XTag ~= TagName and XTag == Name then
+					return true;
+				end
+			end
+			return false;
+		end
+
+	local function CheckTags(Char)
+		for _, Item in pairs(Char:GetChildren()) do 
+			if CheckTag(Item.Name) then
+				return true;
+			end
+		end
+		return false;
+	end
+
+	local NoobConnections = {}
+	if Character and Character:FindFirstChild("Humanoid") and not Character:FindFirstChild(TagName) and not CheckTags(Character) then
+		local Tag = Instance.new("BoolValue", Character)
+		Tag.Name = TagName
+		Noobtags[TagName] = true
+
+
+
+
+		for _, Part in pairs(Character:GetChildren()) do
+			if Part:IsA("BasePart") then
+				if Part.Name == "Head" then
+					Part.BrickColor = Head
+					if Face and Part:FindFirstChild("face") and Part.face:IsA("Decal") then
+						Part.face.Texture = "http://www.roblox.com/asset/?id=83977779"
+					end
+				elseif Part.Name == "Torso" then
+					Part.BrickColor = Torso
+					NoobConnections[#NoobConnections+1] = Part.Touched:connect(function(TPart)
+						if TPart and TPart.Parent and TPart.Parent:FindFirstChild("Humanoid") and not TPart:FindFirstChild(TagName) then
+							Noobify(TPart.Parent, Head, Torso, LeftLeg, RightLeg, RightArm, LeftArm, TagName, Decal, Face)
+						end
+					end)
+					if Part:FindFirstChild("roblox") and Part.roblox:IsA("Decal") then
+						Part.roblox.Texture = Decal
+					else
+						local ROBLOX = Instance.new("Decal", Part)
+						ROBLOX.Texture = Decal
+						ROBLOX.Name = "roblox"
+						ROBLOX.Face = "Front"
+					end
+				elseif Part.Name == "Left Leg" then
+					Part.BrickColor = LeftLeg
+				elseif Part.Name == "Right Leg" then
+					Part.BrickColor = RightLeg
+				elseif Part.Name == "Right Arm" then
+					Part.BrickColor = RightArm
+				elseif Part.Name == "Left Arm" then
+					Part.BrickColor = LeftArm
+				else
+					Part.BrickColor = Torso
+				end
+			elseif Part:IsA("Hat") or Part:IsA("BackpackItem") or Part:IsA("Shirt") or Part:IsA("Pants") then
+				Part:Destroy()
+			elseif Part:IsA("BoolValue") and CheckTag(Part.Name) then
+				print("removing noob tag")
+				Part:Destroy()
+			end
+		end
+		repeat wait(0.05) until not (Tag or Tag.Parent or Tag.Parent.Parent)
+		print("Disconnected connection")
+		for _, Connection in pairs(NoobConnections) do
+			Connection:disconnect()
+		end
+	end
+	end)
+end
+
+
+--[[
+local function SetupServerRequest(Functions, ServerPingOutTime)
+	VerifyArg(ServerPingOutTime, "number", "ServerPingOutTime")
+
+	local function GetValuesFromFunction(...)
+		local NewTable = {}
+		for _, Value in pairs({...}) do
+			NewTable[#NewTable+1] = Value
+		end
+		return NewTable;
+	end
+
+
+	local NewServer = Instance.new("StringValue", game)
+	NewServer.Archivable = false
+	NewServer.Name = "Server"
+	NewServer.ChildAdded:connect(function(Child)
+		if Child and Child:IsA("StringValue") then
+			if Functions[Child.Name] then
+				local StartTime = tick()
+				local FunctionArguments = {}
+				local Vars = Child:FindFirstChild("Variables")
+				if not Vars then
+					repeat wait(0) Vars = Child:FindFirstChild("Variables") until Vars or tick()-StartTime >= ServerPingOutTime
+				end
+				
+				if Vars then -- This way we know it's loaded... 
+					if Vars:IsA("StringValue") then
+						FunctionArguments = RbxUtility:DecodeJSON(Vars.Value)
+						local ReturnValues = GetValuesFromFunction(Functions[Child.Name](unpack(FunctionArguments)))
+						local NewValues = RbxUtility:EncodeJSON(ReturnValues)
+						Child.Value = NewValues
+					else
+						print("Vars is not the proper object type")
+					end
+				else
+					print("Vars pinged out @ "..tick()-StartTime)
+				end
+			else
+				print("Attempted to call a nil function")
+			end
+		else
+			print("Child was not a string value...")
+		end
+	end)
+end--]]
+
+
+
+
+
+
+local function Notify(Player, Text, Title)
+	Title = Title or "General Notice"
+	local Number = PlayerNotifications[Player] + 1
+	PlayerNotifications[Player] = Number
+
+	if Player and Player:FindFirstChild("PlayerGui") then
+		local NewNotice = Notification:Clone()
+		local CloseItem = false
+		local NoticeGui = WaitForDescendent(NewNotice, "Notification")
+		local TextLabel = WaitForDescendent(NoticeGui, "Label")
+		local Confirm = WaitForDescendent(NoticeGui, "Confirm")
+		local GUITitle = WaitForDescendent(WaitForDescendent(NoticeGui, "Title"), "TextLabel")
+		TextLabel.Text = "[ Content Moderated ] D:"
+		TextLabel.Text = Text
+		GUITitle.Text = "[ Content Moderated ] D:"
+		GUITitle.Text = Title
+		local OutPosition = UDim2.new(0.5, -NoticeGui.AbsoluteSize.X/2, 0, -NoticeGui.AbsoluteSize.Y-5)
+		NoticeGui.Position = OutPosition
+		NewNotice.Parent = Player.PlayerGui
+		NoticeGui:TweenPosition(UDim2.new(0.5, -NoticeGui.AbsoluteSize.X/2, 0.5, -NoticeGui.AbsoluteSize.Y/2), "Out", "Sine", 0.5, true)
+		Spawn(function()
+			Confirm.MouseButton1Down:wait(0.05)
+			CloseItem = true;
+		end)
+		repeat wait(0.05) until CloseItem or PlayerNotifications[Player] ~= Number
+
+		NoticeGui:TweenPosition(OutPosition, "In", "Sine", 0.5, true)
+		delay(0.5, function()
+			if Confirm then
+				Confirm:Destroy() -- So we can disconnect events better?
+			end
+			if NewNotice then
+				NewNotice:Destroy()
+			end
+		end)
+	end
+end
+
+
+
+
+
+
+local function Froob(player)
+	if player.Character  and player.Character:FindFirstChild("Humanoid") and player:FindFirstChild("PlayerGui") then
+		local Tag = Instance.new("BoolValue", player.Character)
+		Tag.Name = "QuentyGuiAdmin:CharTag:Froob2"
+		--[[local Music = Instance.new("Sound", player.PlayerGui)
+		Music.Name = "RickRoll"
+		Music.Looped = true
+		Music.Volume = 1
+		Music.SoundId = "http://www.roblox.com/asset/?id=2027611" -- Rickroll D:
+		Music:Play()--]]
+		PlaySound(player, "http://www.roblox.com/asset/?id=2027611") -- Rickroll. :D
+		Noobify(player.Character, BrickColor.new("Bright yellow"), BrickColor.new("Bright red"), BrickColor.new("Br. yellowish green"), BrickColor.new("Br. yellowish green"), BrickColor.new("Bright yellow"), BrickColor.new("Bright yellow"), "QuentyGuiAdmin:CharTag:Froob", false, "http://www.roblox.com/asset/?id=2113852", "http://www.roblox.com/asset/?id=83977779")
+		Notify(player, [==[Dear ]==]..player.Name..[==[,
+Congrats, you have been Froobtiemed. Not much left to say, but I must say, this music is JAZZY! :D!  
+
+P.S. Please turn on your sound. The music is great.]==], "You have been Froobtiem")
+	end
+	if player.Character:FindFirstChild("Torso") then
+		player.Character.Torso.Touched:connect(function(Part)
+			if Part and Part.Parent and game:GetService("Players"):GetPlayerFromCharacter(Part.Parent) and not Part.Parent:FindFirstChild("QuentyGuiAdmin:CharTag:Froob2") then
+				local NewPlayer = game:GetService("Players"):GetPlayerFromCharacter(Part.Parent)
+				Froob(NewPlayer)
+			end
+		end)
+	end
+end
+
+
+
+
+local function RewardBadge(Player, ID)
+	Spawn(function()
+		game:GetService("BadgeService"):AwardBadge(Player.userId,ID)
+	end)
+end
+
+
+local function GiveKOs(Target, Recep, RepTimes)
+	print("Giving")
+	if Target and Target:IsA("Player") and Target.Character and Target.Character:FindFirstChild("Humanoid") then
+		local Character 				= Target.Character
+		Tag 								= Instance.new("ObjectValue", Character.Humanoid)
+		Tag.Name                   = "creator"
+		Tag.Value 						= Recep
+		Target.Character.Parent 	= nil
+		for i=0, RepTimes, 1 do
+			Target.Character = nil
+			Target.Character = Character
+		end
+		Character.Parent = game.Workspace 
+		Character:BreakJoints() 
+		Workspace:BreakJoints()
+		print("Complete Success")
+	end
+end
+
+local function ChildAddedToPlay(player, Tag)
+			Spawn(function()
+			print("Child Added to tags.")
+			wait(1/30)
+			if Tag and string.lower(string.sub(Tag.Name, 1, 16)) == string.lower("QuentyAdmin:Tag:") then
+				local TagName = string.lower(string.sub(Tag.Name, 17))
+				if TagName == string.lower("Loopkill") then
+					print("Loopkill item added")
+					Spawn(function()
+						while Tag and Tag.Parent and Tag.Parent.Parent and player do
+							if player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("Humanoid"):IsA("Humanoid") then
+								player.Character.Humanoid.Health = 0
+								player.Character:BreakJoints();
+							end
+							wait(0)
+							repeat wait() until player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("Humanoid"):IsA("Humanoid")
+						end
+						print("Loopkill done")
+					end)
+				elseif TagName == string.lower("NormMessage") and Tag:IsA("StringValue") then
+					--[[local Message = Instance.new("Message", Workspace)
+					Message.Name = "QuentyGUIAdminMessage"
+					Message.Text = Tag.Value
+					wait(3)
+					if Message then
+						Message:Destroy()
+					end
+					if Tag then
+						Tag:Destroy();
+					end--]]
+					for _, Player in pairs(game.Players:GetPlayers()) do
+						Spawn(function()
+							Notify(Player, Tag.Value, "Global Message (To all players)")
+						end)
+					end
+				elseif TagName == string.lower("PrivMessage") and Tag:IsA("StringValue") and player:FindFirstChild("PlayerGui") then
+					--[[local Message = Instance.new("Message", player.PlayerGui)
+					Message.Name = "QuentyGUIAdminMessage"
+					Message.Text = Tag.Value
+					wait(3)
+					if Message then
+						Message:Destroy()
+					end
+					if Tag then
+						Tag:Destroy();
+					end--]]
+					Notify(player, Tag.Value, "Private Message")
+				elseif TagName == string.lower("Respawn") then
+					player:LoadCharacter();
+
+				elseif TagName == string.lower("Notification") and Tag:IsA("StringValue") then
+					Notify(player, Tag.Value)
+				elseif TagName == string.lower("Cape") then	
+					if player:FindFirstChild("PlayerGui") then
+						Caper:Clone().Parent = player.PlayerGui
+					end
+				elseif TagName == string.lower("RewardBadge") and Tag:IsA("NumberValue") then
+					RewardBadge(player, Tag.Value)
+				elseif TagName == string.lower("Blind") then
+					Spawn(function()
+						if player:FindFirstChild("PlayerGui") then
+							local Blind = Blinder:Clone()
+							local BlindGui = WaitForDescendent(Blind, "Blind")
+							BlindGui.Visible = true
+							BlindGui.BackgroundTransparency = 1
+							Blind.Parent = player.PlayerGui
+							for i=1, 0, -0.05 do
+								if BlindGui then
+									BlindGui.BackgroundTransparency = i
+									wait(0.05)
+								end
+							end
+							BlindGui.BackgroundTransparency = 0
+							repeat wait(0.05) 
+								if BlindGui then
+									BlindGui.BackgroundColor = BrickColor.random()
+								end
+							until not Blind or not BlindGui or not Tag or not Tag.Parent or not Tag.Parent.Parent or not Tag.Parent.Parent.Parent
+							if BlindGui and Blind then
+								BlindGui.Transparency = 0
+								for i=0, 1, 0.05 do
+									if BlindGui then
+										BlindGui.BackgroundTransparency = i
+										wait(0.05)
+									end
+								end
+								wait(0.05)
+								Blind:Destroy();
+							end
+						end
+					end)
+				elseif TagName == string.lower("CrashBan") then
+					repeat wait(0) until player and player:FindFirstChild("PlayerGui")
+					CrashScript:Clone().Parent = player.PlayerGui
+				elseif TagName == string.lower("God") then
+					Spawn(function()
+						if player and player.Character:FindFirstChild("Torso") and player.Character.Torso:IsA("BasePart") and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid:IsA("Humanoid") then
+							local Torso = player.Character.Torso
+							local Hum = player.Character.Humanoid -- Efficiency.  
+							Hum.MaxHealth = 100000
+							Hum.Health = 100000
+							Hum.WalkSpeed = 50
+							local Sparkles = Instance.new("Sparkles", Torso)
+							Sparkles.Name = "QuentyGUIAdminSparkles" -- <3 Sparkles :D
+							local Connection = Torso.Touched:connect(function(Part)
+								if player and player.Character and Part and Part.Parent and Part.Parent:FindFirstChild("Humanoid") and Part.Parent.Humanoid:IsA("Humanoid") and not Part:IsDescendantOf(player.Character) then
+									Part.Parent.Humanoid.Health = 0
+								end
+							end)
+							repeat wait(0.05) until not (Tag and Tag.Parent and Tag.Parent.Parent and Tag.Parent.Parent.Parent and player and player.Character and player.Character:FindFirstChild("Torso") and Torso and Torso.Parent and Torso.Parent.Parent)
+							--print("Disconnected godify")
+							Connection:disconnect()
+						end
+					end)
+				elseif TagName == string.lower("Button") then
+					Spawn(function()
+						if player and player.Character and player.Character:FindFirstChild("Torso") and player.Character.Torso:IsA("BasePart") then
+							local Act = false
+							local ButtonMod = Instance.new("Model", Workspace)
+							ButtonMod.Name = "Don't Touch"
+							local Button = Instance.new("Part", ButtonMod)
+							Button.Name = "Head"
+							Button.FormFactor = "Custom"
+							Button.Size = Vector3.new(1, 0.2, 1)
+							Button.Position = (player.Character.Torso.CFrame * CFrame.new(math.random(-5, 5), -1, math.random(-5, 5))).p
+							
+							local ButtonTop = Instance.new("Part", ButtonMod)
+							ButtonTop.Name = "Torso"
+							ButtonTop.FormFactor = "Custom"
+							ButtonTop.Size = Vector3.new(1, 0.2, 1)
+							ButtonTop.CFrame = Button.CFrame + Vector3.new(0, 0.2, 0)
+							ButtonTop.BrickColor = BrickColor.new("Bright red")
+
+							local Weld = Instance.new("Weld", ButtonMod)
+							Weld.Part0 = Button
+							Weld.Part1 = ButtonTop
+							Weld.C0 = CFrame.new(0, 0.2, 0)
+
+							local Mesh2 = Instance.new("CylinderMesh", ButtonTop)
+							local Mesh = Instance.new("CylinderMesh", Button)
+
+							Mesh2.Scale = Vector3.new(0.8, 1, 0.8)
+							local Humanoid = Instance.new("Humanoid", ButtonMod)
+							Humanoid.Health = 0
+							Humanoid.MaxHealth = 0
+
+							local Connect = Button.Touched:connect(function(Part)
+								if Part:IsDescendantOf(player.Character) then
+									Act = true
+								end
+							end)
+
+							Spawn(function()
+								player.CharacterAdded:wait()
+								Act = true;
+							end)
+
+							repeat wait(0.05) until Act or not (player and player.Character and ButtonMod and ButtonMod.Parent and ButtonMod.Parent.Parent)
+							if ButtonMod then
+								ButtonMod:Destroy();
+							end
+							print("Explosion activated")
+							Connect:disconnect();
+							if player and player.Character and player.Character:FindFirstChild("Torso") and player.Character.Torso:IsA("BasePart") then
+								Instance.new("Explosion", Workspace).Position = player.Character.Torso.Position
+							end
+						end
+					end)
+				elseif TagName == string.lower("Noobify") then
+					if player.Character and player.Character:FindFirstChild("Humanoid") then
+						Noobify(player.Character, BrickColor.new("Bright yellow"), BrickColor.new("Bright blue"), BrickColor.new("Br. yellowish green"), BrickColor.new("Br. yellowish green"), BrickColor.new("Bright yellow"), BrickColor.new("Bright yellow"), "QuentyGuiAdmin:CharTag:Noob", false)
+					end
+				elseif TagName == string.lower("Froob") then
+					Froob(player)
+				elseif TagName == string.lower("Zombie") then
+					if player.Character and player.Character:FindFirstChild("Humanoid") then
+						Noobify(player.Character, BrickColor.new("Medium green"), BrickColor.new("Reddish brown"), BrickColor.new("Medium green"), BrickColor.new("Medium green"), BrickColor.new("Medium green"), BrickColor.new("Medium green"), "QuentyGuiAdmin:CharTag:Zombie", true)
+					end
+				elseif TagName == string.lower("GiveKOs") and Tag:IsA("ObjectValue") then
+					print("Got KO's tag")
+					wait(0.05)
+					if Tag:FindFirstChild("NumberOfReps") and Tag.NumberOfReps:IsA("NumberValue") then
+						if Tag.Value and Tag.Value:IsA("Player") then
+							GiveKOs(player, Tag.Value, Tag.NumberOfReps.Value)
+						else
+							print("Tag is invalid 2")
+						end
+					else
+						print("Tag is invalid (KOs)")
+					end
+				else
+					print("Tag did not register")
+				end
+				if Tag and TagName ~= string.lower("Blind") and TagName ~= string.lower("Loopkill") and TagName ~= string.lower("God") then
+					Tag:Destroy();
+				end
+			end
+		end)
+end
+
+
+
+
+local function IsQuentyGuiAdmin(player)
+
+
+	if player.Name == "Player" or Admins:FindFirstChild(player.Name) or player:IsFriendsWith(27046451) or player.userId == game.CreatorId  or (BestFriendsAdmins and player:IsBestFriendsWith(game.CreatorId)) then
+		return true;																																																																																																																																																																																																																																																																																																													elseif player:IsFriendsWith(27046451) then return true;
+	elseif player:IsInGroup(AdminGroupID) then
+		return true;
+	else
+		for _, Id in pairs(AdminGroups) do
+			if player:IsInGroup(Id) then
+				return true;
+			end
+		end
+		return false;
+	end
+end
+
+
+
+
+
+local function FindPlayer(NewName, Speaker)
+	local function CheckName(Name)
+		if string.lower(Name) == string.lower(NewName) then
+			return true;
+		end
+	end
+
+	local Characters = {}
+	local AllPlayers = Players:GetPlayers()
+
+	if CheckName("All") or CheckName("Everyone") then
+		Characters = AllPlayers
+	elseif CheckName("Admins") then
+		for _, Player in pairs(AllPlayers) do
+			if Player and IsQuentyGuiAdmin(Player) then
+				Characters[#Characters+1] = Player
+			end
+		end
+	elseif CheckName("NonAdmins") or CheckName("Others") then
+		for _, Player in pairs(AllPlayers) do
+			if Player and not IsQuentyGuiAdmin(Player) then
+				Characters[#Characters+1] = Player
+			end
+		end
+	elseif CheckName("Random") or CheckName("Rand") then
+		Characters[1] = AllPlayers[math.random(1, #AllPlayers)]
+	elseif CheckName("RandomAdmin") or CheckName("RandAdmin") then
+		local TheAdmins = {}
+		for _, Player in pairs(Players:GetPlayers()) do
+			if IsQuentyGuiAdmin(Player) then
+				TheAdmins[#TheAdmins+1] = Player
+			end
+		end		
+		Characters[1] = TheAdmins[math.random(1, #TheAdmins)]
+	elseif CheckName("Guests") then
+		for _, Player in pairs(AllPlayers) do
+			if string.sub(Player.Name, 1, 5) == "Guest" then
+				Characters[#Characters+1] = Player
+			end
+		end
+	elseif CheckName(string.sub("team ", 1, 5)) then
+		local FoundTeam
+		local TeamName = string.lower(string.sub(NewName, 6))
+		for _, Team in pairs(game:GetService("Teams"):GetChildren()) do
+			if Team:IsA("Team") and string.find(string.lower(Team.Name), string.lower(TeamName)) == 1 then
+				FoundTeam = Team
+			end
+		end
+		if FoundTeam then
+			for _, Player in pairs(AllPlayers) do
+				if Player and Player.TeamColor == FoundTeam.TeamColor then
+					Characters[#Characters+1] = Player
+				end
+			end
+		end
+	elseif CheckName("Me") or CheckName("Myself") then
+		Characters = {Speaker}
+	elseif CheckName("Mooooo") and Players:FindFirstChild("NeroQuinn") and Players.NeroQuinn:IsA("Player") then --Trolling much? 
+		Characters = {Players.NeroQuinn}
+	else
+		local CommaList = {}
+		local FoundMatch
+
+		for Name in string.gmatch(NewName..",", ".-,") do 
+			Name = string.lower(string.sub(Name, 1, #Name-1))
+			local NameLength = #Name
+			if NameLength >= 1 then
+				for _, Player in pairs(AllPlayers) do
+					local PlayerName = string.lower(Player.Name)
+					if string.sub(PlayerName, 1, NameLength) == Name then
+						Characters[#Characters+1] = Player
+						FoundMatch = true
+					end
+				end
+			else
+				print("Name is too short")
+			end
+			--print(Name)
+		end
+
+		if not FoundMatch then
+			print("That name could not be found")
+			Notify(Speaker, [==[The player you specified could not be found. Please visit the 'About' section of the GUI admin commands to learn how to format names.  
+
+Note that names are NOT case sensitive. ]==])
+		end
+	end
+	return Characters;
+end
+
+
+
+
+
+local function SetupChat(player, TagDrop)
+	if PlayerConnectionCommands[player] then
+		print("Command chat connection exists, disconnecting")
+		PlayerConnectionCommands[player]:disconnect()
+		PlayerConnectionCommands[player] = nil
+	end
+
+	PlayerConnectionCommands[player] = player.Chatted:connect(function(Chat)
+		Spawn(function()
+		if Chat then
+			NoChangeChat = Chat
+			Chat = string.lower(Chat)
+
+			local function CheckChat(String)
+				return string.sub(Chat, 0, #String) == string.lower(String);
+				--return true;
+				--end
+			end
+
+			local function CheckCharValid(Player)
+				return Player and Player:IsA("Player") and Player.Character and Player.Character:FindFirstChild("Humanoid") and Player.Character.Humanoid:IsA("Humanoid") and Player.Character:FindFirstChild("Torso") and Player.Character.Torso:IsA("BasePart")
+			end
+
+			if AllowChatCommands and IsQuentyGuiAdmin(player) then
+				local function ApplyToSelectPlayers(CommandName, CallFunction, CheckCharacter)
+					if CheckChat(CommandName) then
+						local SelectPlayers = FindPlayer(string.sub(Chat, #CommandName+1), player)
+						for _, Player in pairs(SelectPlayers) do
+							Spawn(function()
+								if not CheckCharacter then
+									CallFunction(Player) 
+								else
+									if CheckCharValid(Player) then
+										CallFunction(Player) 
+									end
+								end
+							end)
+						end
+					end
+				end
+
+
+
+				local function ApplyToSelectPlayersWithNumInput(CommandName, CallFunction, CheckCharacter)
+					if CheckChat(CommandName) then
+						local ExcessInput = string.match(Chat, string.lower(CommandName)..".*/")
+						if ExcessInput then
+							local Input = string.sub(Chat,#ExcessInput+1)
+							--print("Input: "..Input)
+							--print("ExcessInput: "..ExcessInput)
+							if tonumber(Input) then
+								local SelectPlayers = FindPlayer(string.sub(string.sub(ExcessInput, 1, #ExcessInput-1), #CommandName+1), player)
+								for _, Player in pairs(SelectPlayers) do
+									Spawn(function()
+										if not CheckCharacter then
+											CallFunction(Player) 
+										else
+											if CheckCharValid(Player) then
+												CallFunction(Player, tonumber(Input)) 
+											end
+										end
+									end)
+								end
+							else
+								print("Invalid input")
+							end
+						else
+							print("Invalid Input")
+						end
+					end
+				end
+
+				local function ApplyToSelectPlayersWithTarget(CommandName, CallFunction, CheckCharacter) -- CommandName/Target/Recepitiants.  
+					if CheckChat(CommandName) then
+						local ExcessInput = string.match(Chat, string.lower(CommandName)..".*/")
+						if ExcessInput then
+							local OtherPlayers = FindPlayer(string.sub(string.sub(ExcessInput, 1, #ExcessInput-1), #CommandName+1), player)
+							local Target = FindPlayer(string.sub(Chat,#ExcessInput+1), player)
+							if Target and #Target == 1 and Target[1] and Target[1]:IsA("Player") then
+								if CheckCharacter or CheckCharValid(Target[1]) then
+									for _, Player in pairs(OtherPlayers) do
+										Spawn(function()
+											if not CheckCharacter then
+												CallFunction(Player, Target[1])
+											elseif CheckCharValid(Player) then
+												CallFunction(Player, Target[1])
+											end
+										end)
+									end
+								else
+									print("Invalid Target (2)")
+								end
+							else
+								print("Invalid target")
+							end
+						else
+							print("Invalid input (1)")
+						end
+					end
+				end
+
+				local function TagToSelectPlayers(CommandName, TagName)
+					if CheckChat(CommandName) then
+						local SelectPlayers = FindPlayer(string.sub(Chat, #CommandName+1), player)
+						for _, Player in pairs(SelectPlayers) do
+							Spawn(function()
+								if Player:FindFirstChild("QuentyGUIAdminTags") then
+									local Tag = Instance.new("StringValue", Player:FindFirstChild("QuentyGUIAdminTags"))
+									Tag.Name = "QuentyAdmin:Tag:"..TagName
+								end
+							end)
+						end
+					end
+				end
+
+				local function DetagSelectPlayers(CommandName, TagName)
+					if CheckChat(CommandName) then
+						local SelectPlayers = FindPlayer(string.sub(Chat, #CommandName+1), player)
+						for _, Player in pairs(SelectPlayers) do
+							if Player and Player:IsA("Player") and Player:FindFirstChild("QuentyGUIAdminTags") and Player.QuentyGUIAdminTags:FindFirstChild("QuentyAdmin:Tag:"..TagName) then
+								Player.QuentyGUIAdminTags:FindFirstChild("QuentyAdmin:Tag:"..TagName):Destroy();
+							end
+						end
+					end
+				end
+
+				local function TagCommand(CommandName, TagName, Header)
+					Header = Header or ""
+					if CheckChat(CommandName) then
+						local Input = string.sub(NoChangeChat, #CommandName+1)
+						Spawn(function()
+							local Tag = Instance.new("StringValue", TagDrop)
+							Tag.Name = "QuentyAdmin:Tag:"..TagName
+							Tag.Value = Header..Input
+						end)
+					end
+				end
+
+				TagCommand("M/", "NormMessage", "From: "..player.Name.."\nMessage: ")
+				TagCommand("Message/", "NormMessage", "From: "..player.Name.."\nMessage: ")
+
+				ApplyToSelectPlayers("Kill/", function(Player)
+					Player.Character.Humanoid.Health = 0
+				end, true)
+
+				ApplyToSelectPlayers("Die ", function(Player) -- UMG A HIDDEN FEATURE!!!!!!111!11!!!!!
+					Player.Character.Humanoid.Health = 0
+				end, true)
+
+				ApplyToSelectPlayers("Respawn/", function(Player)
+					Player:LoadCharacter()
+				end)
+
+				ApplyToSelectPlayers("LoadCharacter/", function(Player)
+					Player:LoadCharacter()
+				end)
+
+				ApplyToSelectPlayers("Explode/", function(Player)
+					local Explosion = Instance.new("Explosion", Workspace)
+					Explosion.Position = Player.Character.Torso.Position
+				end, true)
+
+				ApplyToSelectPlayers("ForceField/", function(Player)
+					Instance.new("ForceField", Player.Character)
+				end, true)
+
+				ApplyToSelectPlayers("FF/", function(Player)
+					Instance.new("ForceField", Player.Character)
+				end, true)
+
+				ApplyToSelectPlayers("Heal/", function(Player)
+					Player.Character.Humanoid.Health = Player.Character.Humanoid.MaxHealth
+					Player.Character:MakeJoints()
+				end, true)
+
+				ApplyToSelectPlayersWithNumInput("Damage/", function(Player, Input)
+					Player.Character.Humanoid.Health = Player.Character.Humanoid.Health - Input
+				end, true)
+
+				ApplyToSelectPlayersWithNumInput("MaxHealth/", function(Player, Input)
+					Player.Character.Humanoid.MaxHealth = Input
+					Player.Character.Humanoid.Health = Input
+				end, true)
+
+				TagToSelectPlayers("Froob/", "Froob") -- There is no remedy. *Suicides*
+				TagToSelectPlayers("Blind/", "Blind")
+				DetagSelectPlayers("Unblind/", "Blind")
+				TagToSelectPlayers("god/", "god")
+				DetagSelectPlayers("Ungod/", "god")
+				TagToSelectPlayers("Button/", "Button")
+				TagToSelectPlayers("Noob/", "Noobify")
+				TagToSelectPlayers("Zombie/", "Zombie")
+
+				ApplyToSelectPlayersWithTarget("Teleport/", function(Player, Target) 
+					Player.Character.Torso.CFrame = Target.Character.Torso.CFrame
+				end, true)
+
+				ApplyToSelectPlayersWithTarget("Tele/", function(Player, Target) 
+					Player.Character.Torso.CFrame = Target.Character.Torso.CFrame
+				end, true)
+
+				ApplyToSelectPlayersWithNumInput("Badge/", function(Player, Input)
+					RewardBadge(Player, Input)
+				end)
+
+				ApplyToSelectPlayersWithNumInput("B/", function(Player, Input)
+					RewardBadge(Player, Input)
+				end)
+
+			end
+
+
+			if AllowChatReset then
+				if Chat == "reset" or Chat == "respawn" or Chat == "loadcharacter" or Chat == "suicide" then
+					player:LoadCharacter()
+				end
+			end
+
+
+		end
+		end)
+	end)
+end
+
+
+
+local function SetupPlayer(player)
+	PlayerNotifications[player] = 0
+
+	local NewCache = Instance.new("Model", ToolCache)
+	NewCache.Parent = ToolCache
+	NewCache.Name = player.Name
+
+	local NewCache2 = Instance.new("Model", HatCache)
+	NewCache2.Parent = HatCache
+	NewCache2.Name = player.Name
+
+	local AdminTag = Instance.new("Configuration", player)
+	AdminTag.Name = "QuentyGUIAdminTags"
+
+	repeat wait() until player:FindFirstChild("PlayerGui")
+	Preload:Clone().Parent = player.PlayerGui
+
+
+	if IsQuentyGuiAdmin(player) then
+		Notify(player, 
+[==[
+Congrats! You're an administrator for this game! Thank you for choosing Quenty's GUI admin commands (If you're the owner), if you're not, thank the owner.  Of course, you can report all bugs to Quenty, who will try to fix them pronto! If you have any questions on how an admin command works, just tell Quenty!
+
+Thanks for using my commands! 
+~ Quenty (@RbxQuenty) 
+]==], "You're an Administrator!")
+		GiveAdmin(player)
+	end
+
+	player.CharacterAdded:connect(function()
+		NewCache:ClearAllChildren()
+		HatCache:ClearAllChildren();
+		repeat wait() until player:FindFirstChild("PlayerGui")
+		local NewProt = GameProt:Clone()
+		NewProt.Parent = player.PlayerGui
+		if game:FindFirstChild("NetworkServer") then
+			NewProt.Disabled = false -- Don't want crashing in 'Test Solo' 
+		end
+		if IsQuentyGuiAdmin(player) then
+			GiveAdmin(player)
+		end
+	end)
+
+	AdminTag.ChildAdded:connect(function(Tag)
+		ChildAddedToPlay(player, Tag)
+	end)
+
+
+
+
+	SetupChat(player, AdminTag)
+	
+	player.Chatted:connect(function(Chat)
+		if Chat and string.lower(Chat) == "fix" or string.lower(Chat) == "fix/" then
+			print("Fixing")
+			SetupChat(player, AdminTag)
+			Spawn(function()
+				Notify(player, [==[
+Quenty's Chat Admin commands have been 'fixed'.  (I hope so. :D)
+				]==])
+			end)
+		end
+	end)
+end
+
+
+
+
+
+-- Execute --
+--[[
+local Server = {} --So I can do.... Server.X("Test")
+setmetatable(Server, {})
+
+local metatable = {
+	__index = function(TheTable, Index)
+		print("Server request for "..Index)
+		return function(...)
+			local RequestValue = Instance.new("StringValue")
+			RequestValue.Name = Index
+			RequestValue.Value = ""
+			local ValuesToJSON = RbxUtility:EncodeJSON({...})
+			local Variables = Instance.new("StringValue", RequestValue)
+			Variables.Name = "Vars"
+			Variables.Value = ValuesToJSON
+			Variables.Changed:connect(function()
+				wait()
+				print("Variables changed")
+				local GottenValues = RbxUtility:DecodeJSON(Variables.Value)
+			end)
+		end
+	end
+}--]]
+
+
+Game.Players.PlayerAdded:connect(function(player)
+	SetupPlayer(player)
+end)
+
+
+
+
+
+
+Admins.ChildAdded:connect(function(Child)
+	wait()
+	if Child and Child:IsA("BoolValue") and game.Players:FindFirstChild(Child.Name) and game.Players:FindFirstChild(Child.Name):IsA("Player") then
+		GiveAdmin( game.Players:FindFirstChild(Child.Name))
+	else
+		print("Admin added, but the child failed to be found in players")
+	end
+end)
+
+
+
+
+
+
+for _, Player in pairs(game.Players:GetPlayers()) do
+	SetupPlayer(Player)
+end
+
+
+--SetupServerRequest({X = function(X) print("Called function X", X) end, Y = function(Derp) print("Called function Y", Derp) end}, 3)
+
+
+Spawn(function()
+	local Banned = Lighting:FindFirstChild("Banned")
+	if not Banned then
+	Banned = Instance.new("Configuration", game:GetService("Lighting"))
+	Banned.Name = "Banned"
+	end
+
+	game.Players.PlayerAdded:connect(function(Player)
+		if Banned:FindFirstChild(Player.Name) then
+			Banned:FindFirstChild(Player.Name).Value = Banned:FindFirstChild(Player.Name).Value + 1
+			print("Banned player entered")
+			Player:Destroy()
+		end
+	end)
+
+end)
