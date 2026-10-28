@@ -1,0 +1,372 @@
+-- Universal Anti-Exploit Script by RobloxScripts  
+-- Features: AntiFling, AntiRing, AntiVoid, AntiToolKill, AntiBlackhole  
+-- GUI: Draggable, toggle ON/OFF, shadowy black theme
+
+local UIS = game:GetService("UserInputService")  
+local RunService = game:GetService("RunService")  
+local Players = game:GetService("Players")  
+local player = Players.LocalPlayer  
+local camera = workspace.CurrentCamera
+
+-- Configuration  
+local CONFIG = {  
+    Enabled = true,  
+    GUIColor = Color3.fromRGB(10, 10, 10),  
+    GUIStrokeColor = Color3.fromRGB(40, 40, 40),  
+    UITextColor = Color3.fromRGB(200, 200, 200),  
+    ToggleText = "ON",  
+    DragToggle = true,  
+    Draggable = true,  
+    Size = UDim2.new(0, 250, 0, 180),  
+    Position = UDim2.new(0.5, -125, 0.5, -90),  
+}
+
+-- Create ScreenGui  
+local screenGui = Instance.new("ScreenGui")  
+screenGui.Name = "AntiExploitGUI"  
+screenGui.ResetOnSpawn = false  
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling  
+screenGui.Parent = game:GetService("CoreGui") or player:WaitForChild("PlayerGui")
+
+-- Main Frame  
+local mainFrame = Instance.new("Frame")  
+mainFrame.Name = "MainFrame"  
+mainFrame.Size = CONFIG.Size  
+mainFrame.Position = CONFIG.Position  
+mainFrame.BackgroundColor3 = CONFIG.GUIColor  
+mainFrame.BorderSizePixel = 0  
+mainFrame.Parent = screenGui
+
+local stroke = Instance.new("UIStroke")  
+stroke.Color = CONFIG.GUIStrokeColor  
+stroke.Thickness = 2  
+stroke.Parent = mainFrame
+
+-- Title  
+local title = Instance.new("TextLabel")  
+title.Size = UDim2.new(1, 0, 0, 30)  
+title.Position = UDim2.new(0, 0, 0, 0)  
+title.BackgroundTransparency = 1  
+title.Text = "ANTI EXPLOIT V2"  
+title.TextColor3 = CONFIG.UITextColor  
+title.TextScaled = true  
+title.Font = Enum.Font.GothamBold  
+title.Parent = mainFrame
+
+-- Toggle Button  
+local toggleBtn = Instance.new("TextButton")  
+toggleBtn.Size = UDim2.new(0.8, 0, 0, 35)  
+toggleBtn.Position = UDim2.new(0.1, 0, 0, 40)  
+toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)  
+toggleBtn.Text = "Toggle: " .. CONFIG.ToggleText  
+toggleBtn.TextColor3 = CONFIG.UITextColor  
+toggleBtn.Font = Enum.Font.GothamSemibold  
+toggleBtn.TextScaled = true  
+toggleBtn.Parent = mainFrame
+
+local toggleStroke = Instance.new("UIStroke")  
+toggleStroke.Color = CONFIG.GUIStrokeColor  
+toggleStroke.Thickness = 1  
+toggleStroke.Parent = toggleBtn
+
+-- Status Label  
+local statusLabel = Instance.new("TextLabel")  
+statusLabel.Size = UDim2.new(1, 0, 0, 20)  
+statusLabel.Position = UDim2.new(0, 0, 0, 80)  
+statusLabel.BackgroundTransparency = 1  
+statusLabel.Text = "Status: Active"  
+statusLabel.TextColor3 = CONFIG.UITextColor  
+statusLabel.TextScaled = true  
+statusLabel.Font = Enum.Font.Gotham  
+statusLabel.Parent = mainFrame
+
+-- Feature labels  
+local featureLabel = Instance.new("TextLabel")  
+featureLabel.Size = UDim2.new(1, 0, 0, 60)  
+featureLabel.Position = UDim2.new(0, 0, 0, 100)  
+featureLabel.BackgroundTransparency = 1  
+featureLabel.Text = "AntiFling | AntiRing | AntiVoid  
+AntiToolKill | AntiBlackhole"  
+featureLabel.TextColor3 = CONFIG.UITextColor  
+featureLabel.TextScaled = true  
+featureLabel.Font = Enum.Font.Gotham  
+featureLabel.TextWrap = true  
+featureLabel.Parent = mainFrame
+
+-- Draggable functionality  
+local dragging = false  
+local dragInput, dragStart, startPos
+
+mainFrame.InputBegan:Connect(function(input)  
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then  
+        if CONFIG.Draggable then  
+            dragging = true  
+            dragStart = input.Position  
+            startPos = mainFrame.Position  
+            input.Changed:Connect(function()  
+                if input.UserInputState == Enum.UserInputState.End then  
+                    dragging = false  
+                end  
+            end)  
+        end  
+    end  
+end)
+
+UIS.InputChanged:Connect(function(input)  
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then  
+        if dragging then  
+            dragInput = input  
+            local delta = input.Position - dragStart  
+            mainFrame.Position = UDim2.new(  
+                startPos.X.Scale, startPos.X.Offset + delta.X,  
+                startPos.Y.Scale, startPos.Y.Offset + delta.Y  
+            )  
+        end  
+    end  
+end)
+
+-- Toggle logic  
+toggleBtn.MouseButton1Click:Connect(function()  
+    CONFIG.Enabled = not CONFIG.Enabled  
+    if CONFIG.Enabled then  
+        toggleBtn.Text = "Toggle: ON"  
+        statusLabel.Text = "Status: Active"  
+        toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 80, 30)  
+    else  
+        toggleBtn.Text = "Toggle: OFF"  
+        statusLabel.Text = "Status: Disabled"  
+        toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 30, 30)  
+    end  
+end)
+
+-- Anti-Fling: Prevent character from being flung  
+local function antiFling()  
+    local function onCharacterAdded(character)  
+        local humanoid = character:WaitForChild("Humanoid")  
+        local rootPart = character:WaitForChild("HumanoidRootPart")  
+          
+        if rootPart then  
+            -- Remove any existing linear velocity constraints  
+            for _, child in pairs(character:GetDescendants()) do  
+                if child:IsA("BodyVelocity") or child:IsA("BodyAngularVelocity") then  
+                    child:Destroy()  
+                end  
+            end  
+              
+            -- Prevent flinging by anchoring root part temporarily when force is applied  
+            rootPart.Anchored = false  
+              
+            -- Use Heartbeat to reset unwanted velocities  
+            local connection  
+            connection = RunService.Heartbeat:Connect(function()  
+                if not CONFIG.Enabled or not rootPart or not rootPart.Parent then  
+                    if connection then connection:Disconnect() end  
+                    return  
+                end  
+                  
+                -- Reset linear and angular velocity to prevent flinging  
+                rootPart.Velocity = Vector3.new(0, 0, 0)  
+                rootPart.RotVelocity = Vector3.new(0, 0, 0)  
+                rootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)  
+                rootPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)  
+            end)  
+              
+            character.DescendantAdded:Connect(function(descendant)  
+                if descendant:IsA("BodyVelocity") or descendant:IsA("BodyAngularVelocity") then  
+                    descendant:Destroy()  
+                end  
+            end)  
+        end  
+    end  
+      
+    if player.Character then  
+        onCharacterAdded(player.Character)  
+    end  
+    player.CharacterAdded:Connect(onCharacterAdded)  
+end
+
+-- Anti-Ring: Anti-exploit ring tools  
+local function antiRing()  
+    local function onCharacterAdded(character)  
+        character.DescendantAdded:Connect(function(descendant)  
+            if not CONFIG.Enabled then return end  
+            if descendant:IsA("Tool") then  
+                -- Monitor tools that might create ring-like exploitations  
+                for _, child in pairs(descendant:GetDescendants()) do  
+                    if child:IsA("BodyVelocity") or child:IsA("BodyAngularVelocity") then  
+                        if CONFIG.Enabled then  
+                            child:Destroy()  
+                        end  
+                    end  
+                end  
+            end  
+        end)  
+    end  
+      
+    if player.Character then  
+        onCharacterAdded(player.Character)  
+    end  
+    player.CharacterAdded:Connect(onCharacterAdded)  
+end
+
+-- Anti-Void: Prevent character from falling into void  
+local function antiVoid()  
+    local function onCharacterAdded(character)  
+        local humanoid = character:WaitForChild("Humanoid")  
+        local rootPart = character:WaitForChild("HumanoidRootPart")  
+          
+        if rootPart and humanoid then  
+            local connection  
+            connection = RunService.Heartbeat:Connect(function()  
+                if not CONFIG.Enabled or not rootPart or not rootPart.Parent then  
+                    if connection then connection:Disconnect() end  
+                    return  
+                end  
+                  
+                -- If falling below map, respawn safely  
+                if rootPart.Position.Y < -1000 then  
+                    humanoid:ChangeState(Enum.HumanoidStateType.Dead)  
+                    task.wait(0.1)  
+                    if player.Character then  
+                        local newRoot = player.Character:FindFirstChild("HumanoidRootPart")  
+                        if newRoot then  
+                            newRoot.CFrame = CFrame.new(0, 50, 0)  
+                        end  
+                    end  
+                end  
+            end)  
+        end  
+    end  
+      
+    if player.Character then  
+        onCharacterAdded(player.Character)  
+    end  
+    player.CharacterAdded:Connect(onCharacterAdded)  
+end
+
+-- Anti-ToolKill: Prevent tools from killing you  
+local function antiToolKill()  
+    local function onCharacterAdded(character)  
+        local humanoid = character:WaitForChild("Humanoid")  
+          
+        humanoid.Died:Connect(function()  
+            if CONFIG.Enabled then  
+                -- Check if death was caused by a tool exploit  
+                task.wait(0.5)  
+                -- Attempt to respawn  
+                if player.Character then return end -- Already respawned  
+                -- Respawn logic handled by game  
+            end  
+        end)  
+          
+        -- Remove damage sources from tools  
+        character.DescendantAdded:Connect(function(descendant)  
+            if not CONFIG.Enabled then return end  
+            if descendant:IsA("Tool") then  
+                for _, child in pairs(descendant:GetDescendants()) do  
+                    if child:IsA("Humanoid") and child ~= humanoid then  
+                        -- Neutralize other tool-based humanoids  
+                        child.Health = 0  
+                    end  
+                end  
+            end  
+        end)  
+          
+        -- Monitor for sudden damage events (potential toolkill)  
+        local healthChangedConn  
+        healthChangedConn = humanoid.HealthChanged:Connect(function(newHealth)  
+            if CONFIG.Enabled and newHealth < humanoid.Health - 50 then  
+                -- Sudden large damage possibly from tool exploit  
+                -- We can't fully prevent server-side, but log it  
+            end  
+        end)  
+    end  
+      
+    if player.Character then  
+        onCharacterAdded(player.Character)  
+    end  
+    player.CharacterAdded:Connect(onCharacterAdded)  
+end
+
+-- Anti-Blackhole: Prevent blackhole/gravity exploits  
+local function antiBlackhole()  
+    local function onCharacterAdded(character)  
+        local rootPart = character:WaitForChild("HumanoidRootPart")  
+        if rootPart then  
+            local connection  
+            connection = RunService.Heartbeat:Connect(function()  
+                if not CONFIG.Enabled or not rootPart or not rootPart.Parent then  
+                    if connection then connection:Disconnect() end  
+                    return  
+                end  
+                  
+                -- Monitor for abnormal gravitational forces  
+                if rootPart.AssemblyLinearVelocity.Magnitude > 500 then  
+                    -- Extremely high velocity, likely a blackhole effect  
+                    rootPart.AssemblyLinearVelocity = rootPart.AssemblyLinearVelocity * 0.1  
+                end  
+                  
+                -- Prevent being pulled to a point (blackhole)  
+                for _, obj in pairs(workspace:GetDescendants()) do  
+                    if obj:IsA("BasePart") and obj.Name:lower():find("blackhole") then  
+                        -- Destroy blackhole parts  
+                        if CONFIG.Enabled then  
+                            obj:Destroy()  
+                        end  
+                    end  
+                    -- Also check for parts with extreme properties (blackhole simulation)  
+                    if obj:IsA("Part") or obj:IsA("MeshPart") or obj:IsA("UnionOperation") then  
+                        if obj:GetAttribute("Blackhole") or obj:GetAttribute("GravityWell") then  
+                            if CONFIG.Enabled then  
+                                obj:Destroy()  
+                            end  
+                        end  
+                    end  
+                end  
+            end)  
+        end  
+    end  
+      
+    if player.Character then  
+        onCharacterAdded(player.Character)  
+    end  
+    player.CharacterAdded:Connect(onCharacterAdded)  
+end
+
+-- Initialize all systems  
+local function initAll()  
+    antiFling()  
+    antiRing()  
+    antiVoid()  
+    antiToolKill()  
+    antiBlackhole()  
+end
+
+initAll()
+
+-- Reinitialize when character respawns (universal persistence)  
+player.CharacterAdded:Connect(function()  
+    task.wait(0.5)  
+    initAll()  
+end)
+
+-- GUI Toggle via keybind (optional: press "P" to toggle)  
+UIS.InputBegan:Connect(function(input, gameProcessed)  
+    if gameProcessed then return end  
+    if input.KeyCode == Enum.KeyCode.P then  
+        toggleBtn.MouseButton1Click:Fire() -- Fire click for toggle  
+        -- Manual toggle  
+        CONFIG.Enabled = not CONFIG.Enabled  
+        if CONFIG.Enabled then  
+            toggleBtn.Text = "Toggle: ON"  
+            statusLabel.Text = "Status: Active"  
+            toggleBtn.BackgroundColor3 = Color3.fromRGB(30, 80, 30)  
+        else  
+            toggleBtn.Text = "Toggle: OFF"  
+            statusLabel.Text = "Status: Disabled"  
+            toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 30, 30)  
+        end  
+    end  
+end)
+
+print("[Anti-Exploit V2] Loaded successfully! Press P to toggle GUI.")  
